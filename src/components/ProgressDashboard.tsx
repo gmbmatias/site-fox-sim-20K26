@@ -233,7 +233,9 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
     (progress.correctAnswers / (progress.questionsAnswered || 1)) * 100
   );
 
-  const reviews = Object.entries(progress.reviewQueue).sort((a, b) => b[1] - a[1]);
+  const reviews: [string, number][] = Object.entries(progress.reviewTopics || {}).map(
+    ([topic, count]) => [topic, Number(count)]
+  ).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="dashboard-layout">
@@ -244,7 +246,7 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
             <Clock3 size={20} />
           </div>
           <span className="metric-kicker-label">{t.timeStudied}</span>
-          <strong className="metric-big-number">{progress.totalMinutes} min</strong>
+          <strong className="metric-big-number">{progress.studyMinutes} min</strong>
           <small className="metric-sub-label">
             {t.dailyGoal.replace("{goal}", String(progress.dailyGoal))}
           </small>
