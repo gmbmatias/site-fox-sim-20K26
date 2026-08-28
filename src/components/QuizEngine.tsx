@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Clock3, RotateCcw, Trophy, XCircle, Sparkles, AlertTriangle, ArrowRight, Gauge } from "lucide-react";
+import { CheckCircle2, Clock3, RotateCcw, Trophy, XCircle, Sparkles, AlertTriangle, ArrowRight, Gauge, Filter, Layers, Zap, BookOpen, Check } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ValidLocale } from "@/lib/i18n";
@@ -11,7 +11,7 @@ import { soundEngine } from "./GlobalInteractivity";
 
 type QuizMode = "questoes" | "simulado";
 
-function shuffle<T>(items: T[]) {
+function shuffle<T>(items: T[]): T[] {
   return [...items].sort(() => Math.random() - 0.5);
 }
 
@@ -46,114 +46,129 @@ const STRINGS: Record<ValidLocale, {
   confirmAnswer: string;
   nextQuestion: string;
   seeResults: string;
+  allSubjects: string;
+  questionAmountLabel: string;
+  filterSubjectLabel: string;
 }> = {
   "pt-br": {
-    configKicker: "CONFIGURAÇÃO",
-    configTitleSim: "Prepare sua cabine",
-    configTitleQuest: "Escolha sua matéria",
-    configDescSim: "6 questões, 30 minutos e resultado por matéria. O cronômetro começa ao iniciar.",
-    configDescQuest: "Pratique com correção e explicação logo após cada resposta.",
+    configKicker: "CONFIGURAÇÃO DE TREINAMENTO",
+    configTitleSim: "Simulado de Banca Oficial",
+    configTitleQuest: "Banco de Questões e Treino por Matéria",
+    configDescSim: "Simule as condições reais da banca com tempo cronometrado e diagnóstico detalhado por disciplina.",
+    configDescQuest: "Pratique com correção imediata, resoluções comentadas e dicas técnicas para fixar o aprendizado.",
     questionsCount: "questões",
-    timeLimit: "Tempo limite: 30 min",
+    timeLimit: "Tempo limite cronometrado",
     progressiveTimer: "Cronômetro progressivo",
     activitiesCompleted: "atividades concluídas",
     startBtn: "Iniciar",
-    finalResult: "RESULTADO FINAL",
-    accuracy: "de acerto",
+    finalResult: "DIAGNÓSTICO FINAL DA SESSÃO",
+    accuracy: "de aproveitamento",
     resultSummary: "Você acertou {correct} de {total} questões em {time}.",
-    redoBtn: "Refazer",
-    subjectPerformance: "DESEMPENHO POR MATÉRIA",
-    reviewNote: "Tópicos abaixo de 70% entram automaticamente na sua fila de revisão.",
+    redoBtn: "Novo Treinamento",
+    subjectPerformance: "DESEMPENHO POR DISCIPLINA",
+    reviewNote: "Tópicos com rendimento abaixo de 70% são salvos na sua Fila de Revisão Prioritária.",
     questionLabel: "QUESTÃO",
-    correctAnswer: "Resposta correta",
-    reviewAnswer: "Vamos revisar",
-    educationalNote: "Questão educacional elaborada pela FOX SIM com base no conteúdo estudado.",
-    selectOptionPrompt: "Selecione uma alternativa",
-    answeredOf: "{current} de {total} respondidas",
-    confirmAnswer: "Confirmar resposta",
-    nextQuestion: "Próxima questão",
-    seeResults: "Ver resultado",
+    correctAnswer: "Gabarito Correto!",
+    reviewAnswer: "Gabarito Comentado",
+    educationalNote: "Questão com embasamento técnico e regulamentar da FOX SIM.",
+    selectOptionPrompt: "Selecione uma alternativa para confirmar",
+    answeredOf: "{current} de {total} questões respondidas",
+    confirmAnswer: "Confirmar Resposta",
+    nextQuestion: "Avançar para a Próxima",
+    seeResults: "Finalizar e Ver Resultado",
+    allSubjects: "Todas as Matérias",
+    questionAmountLabel: "Quantidade de Questões:",
+    filterSubjectLabel: "Filtrar por Matéria:",
   },
   en: {
-    configKicker: "CONFIGURATION",
-    configTitleSim: "Prepare your flight deck",
-    configTitleQuest: "Choose your subject",
-    configDescSim: "6 questions, 30 minutes, and subject score breakdown. Timer begins upon start.",
-    configDescQuest: "Practice questions with instant feedback and in-depth explanations.",
+    configKicker: "TRAINING CONFIGURATION",
+    configTitleSim: "Flight Exam Simulation",
+    configTitleQuest: "Question Bank & Subject Practice",
+    configDescSim: "Simulate official aviation exams with countdown timer and discipline performance analytics.",
+    configDescQuest: "Practice questions with instant feedback and in-depth regulatory explanations.",
     questionsCount: "questions",
-    timeLimit: "Time limit: 30 min",
+    timeLimit: "Timed exam mode",
     progressiveTimer: "Stopwatch mode",
     activitiesCompleted: "activities completed",
     startBtn: "Start",
-    finalResult: "FINAL SCORE",
+    finalResult: "FINAL SESSION DIAGNOSTIC",
     accuracy: "score",
     resultSummary: "You answered {correct} of {total} questions correctly in {time}.",
-    redoBtn: "Retake",
+    redoBtn: "New Training",
     subjectPerformance: "PERFORMANCE BY SUBJECT",
-    reviewNote: "Subjects below 70% are automatically highlighted for reinforcement.",
+    reviewNote: "Subjects below 70% are automatically scheduled in your Priority Review Queue.",
     questionLabel: "QUESTION",
-    correctAnswer: "Correct answer",
-    reviewAnswer: "Let's review",
-    educationalNote: "Educational question developed by FOX SIM based on standard syllabus.",
-    selectOptionPrompt: "Select an option",
+    correctAnswer: "Correct Answer!",
+    reviewAnswer: "Explanation & Review",
+    educationalNote: "Developed by FOX SIM based on standard ICAO/FAA syllabi.",
+    selectOptionPrompt: "Select an option to confirm",
     answeredOf: "{current} of {total} answered",
-    confirmAnswer: "Confirm answer",
-    nextQuestion: "Next question",
-    seeResults: "View results",
+    confirmAnswer: "Confirm Answer",
+    nextQuestion: "Next Question",
+    seeResults: "View Results",
+    allSubjects: "All Subjects",
+    questionAmountLabel: "Question Count:",
+    filterSubjectLabel: "Filter by Subject:",
   },
   es: {
-    configKicker: "CONFIGURACIÓN",
-    configTitleSim: "Prepara tu cabina",
-    configTitleQuest: "Elige tu materia",
-    configDescSim: "6 preguntas, 30 minutos y análisis por materia. El temporizador inicia al comenzar.",
-    configDescQuest: "Practica con retroalimentación y explicaciones inmediatas.",
+    configKicker: "CONFIGURACIÓN DE ENTRENAMIENTO",
+    configTitleSim: "Simulador de Examen Oficial",
+    configTitleQuest: "Banco de Preguntas por Materia",
+    configDescSim: "Simula las condiciones reales de examen con cronómetro y diagnóstico por materia.",
+    configDescQuest: "Practica con correcciones instantáneas y explicaciones paso a paso.",
     questionsCount: "preguntas",
-    timeLimit: "Límite de tiempo: 30 min",
+    timeLimit: "Modo cronometrado",
     progressiveTimer: "Cronómetro progresivo",
     activitiesCompleted: "actividades completadas",
     startBtn: "Iniciar",
-    finalResult: "RESULTADO FINAL",
+    finalResult: "DIAGNÓSTICO FINAL",
     accuracy: "de acierto",
     resultSummary: "Has acertado {correct} de {total} preguntas en {time}.",
-    redoBtn: "Repetir",
+    redoBtn: "Nuevo Entrenamiento",
     subjectPerformance: "RENDIMIENTO POR MATERIA",
-    reviewNote: "Las materias por debajo del 70% se señalan para repaso prioritario.",
+    reviewNote: "Las materias por debajo del 70% se añaden a tu Cola de Repaso.",
     questionLabel: "PREGUNTA",
-    correctAnswer: "Respuesta correcta",
-    reviewAnswer: "Vamos a revisar",
-    educationalNote: "Pregunta educativa diseñada por FOX SIM según el programa oficial.",
-    selectOptionPrompt: "Selecciona una opción",
+    correctAnswer: "¡Respuesta Correcta!",
+    reviewAnswer: "Revisión y Explicación",
+    educationalNote: "Pregunta elaborada por FOX SIM según normativa OACI.",
+    selectOptionPrompt: "Selecciona una opción para confirmar",
     answeredOf: "{current} de {total} respondidas",
-    confirmAnswer: "Confirmar respuesta",
-    nextQuestion: "Siguiente pregunta",
-    seeResults: "Ver resultados",
+    confirmAnswer: "Confirmar Respuesta",
+    nextQuestion: "Siguiente Pregunta",
+    seeResults: "Ver Resultados",
+    allSubjects: "Todas las Materias",
+    questionAmountLabel: "Cantidad de Preguntas:",
+    filterSubjectLabel: "Filtrar por Materia:",
   },
   fr: {
-    configKicker: "CONFIGURATION",
-    configTitleSim: "Préparez votre cockpit",
-    configTitleQuest: "Choisissez votre matière",
-    configDescSim: "6 questions, 30 minutes et bilan par matière. Le chronomètre démarre au lancement.",
-    configDescQuest: "Pratiquez avec correction instantanée et explications complètes.",
+    configKicker: "CONFIGURATION DE L'ENTRAÎNEMENT",
+    configTitleSim: "Simulation d'Examen Théorique",
+    configTitleQuest: "Banque de Questions & Entraînement",
+    configDescSim: "Simulez l'examen officiel avec chronomètre et bilan détaillé par discipline.",
+    configDescQuest: "Entraînez-vous avec correction instantanée et explications complètes.",
     questionsCount: "questions",
-    timeLimit: "Temps limite : 30 min",
+    timeLimit: "Temps limité",
     progressiveTimer: "Chronomètre",
     activitiesCompleted: "activités terminées",
     startBtn: "Démarrer",
-    finalResult: "RÉSULTAT FINAL",
+    finalResult: "BILAN DE LA SESSION",
     accuracy: "de réussite",
     resultSummary: "Vous avez validé {correct} sur {total} questions en {time}.",
-    redoBtn: "Recommencer",
-    subjectPerformance: "PERFORMANCES PAR MATIÈRE",
-    reviewNote: "Les thèmes sous 70 % sont automatiquement ajoutés à votre liste de révision.",
+    redoBtn: "Nouvelle Session",
+    subjectPerformance: "PERFORMANCES PAR DISCIPLINE",
+    reviewNote: "Les matières avec un score inférieur à 70 % sont ajoutées à votre liste de révision.",
     questionLabel: "QUESTION",
-    correctAnswer: "Bonne réponse",
-    reviewAnswer: "Revue de la question",
-    educationalNote: "Question pédagogique élaborée par FOX SIM selon les standards aéronautiques.",
-    selectOptionPrompt: "Sélectionnez une réponse",
+    correctAnswer: "Bonne Réponse !",
+    reviewAnswer: "Explication et Correction",
+    educationalNote: "Élaboré par FOX SIM selon les standards aéronautiques.",
+    selectOptionPrompt: "Sélectionnez une réponse pour valider",
     answeredOf: "{current} sur {total} répondues",
-    confirmAnswer: "Confirmer la réponse",
-    nextQuestion: "Question suivante",
-    seeResults: "Voir le résultat",
+    confirmAnswer: "Confirmer la Réponse",
+    nextQuestion: "Question Suivante",
+    seeResults: "Voir le Résultat",
+    allSubjects: "Toutes les Matières",
+    questionAmountLabel: "Nombre de Questions :",
+    filterSubjectLabel: "Filtrer par Matière :",
   },
 };
 
@@ -164,6 +179,9 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
   const initialCourse = validCourses.includes(queryCourse.toLowerCase()) ? (queryCourse.toLowerCase() as CourseCode) : "pp";
 
   const [course, setCourse] = useState<CourseCode>(initialCourse);
+  const [selectedSubject, setSelectedSubject] = useState<string>("ALL");
+  const [questionCount, setQuestionCount] = useState<number>(mode === "simulado" ? 10 : 15);
+  
   const [pool, setPool] = useState<Question[]>([]);
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -171,12 +189,19 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
   const [selected, setSelected] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [seconds, setSeconds] = useState(mode === "simulado" ? 30 * 60 : 0);
+  const [seconds, setSeconds] = useState(0);
   const [historyCount, setHistoryCount] = useState(0);
 
   const t = STRINGS[locale] || STRINGS["pt-br"];
   const courseList = getCourses(locale);
   const allQuestions = getQuestions(locale);
+
+  // Available subjects for current course
+  const courseSubjects = useMemo(() => {
+    const questionsForCourse = allQuestions.filter((q) => q.course === course);
+    const subjectsSet = new Set(questionsForCourse.map((q) => q.subject));
+    return Array.from(subjectsSet);
+  }, [allQuestions, course]);
 
   useEffect(() => {
     setHistoryCount(loadProgress().activities.filter((item) => item.kind === mode).length);
@@ -195,7 +220,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
             if (answers[question.id] === question.correct) subjects[question.subject].correct++;
           });
           const correct = pool.filter((question) => answers[question.id] === question.correct).length;
-          recordActivity({ kind: mode, course, correct, total: pool.length, durationSeconds: 30 * 60, subjects });
+          recordActivity({ kind: mode, course, correct, total: pool.length, durationSeconds: questionCount * 2 * 60, subjects });
           setHistoryCount((count) => count + 1);
           setFinished(true);
           soundEngine.playSuccess();
@@ -205,19 +230,29 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [started, finished, mode, pool, answers, course]);
+  }, [started, finished, mode, pool, answers, course, questionCount]);
 
   const start = () => {
     soundEngine.playChirp();
-    const available = allQuestions.filter((question) => question.course === course);
-    setPool(mode === "simulado" ? shuffle(available).slice(0, 6) : available);
+    let available = allQuestions.filter((question) => question.course === course);
+    
+    if (selectedSubject !== "ALL") {
+      available = available.filter((question) => question.subject === selectedSubject);
+    }
+
+    const shuffled = shuffle(available);
+    const chosenCount = Math.min(questionCount, shuffled.length);
+    const finalPool = shuffled.slice(0, chosenCount > 0 ? chosenCount : shuffled.length);
+
+    setPool(finalPool);
     setIndex(0);
     setSelected(null);
     setConfirmed(false);
     setAnswers({});
     setFinished(false);
     setStarted(true);
-    setSeconds(mode === "simulado" ? 30 * 60 : 0);
+    // 2 minutes per question in simulado mode
+    setSeconds(mode === "simulado" ? finalPool.length * 2 * 60 : 0);
   };
 
   const current = pool[index];
@@ -261,12 +296,13 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
       if (finalAnswers[question.id] === question.correct) subjects[question.subject].correct++;
     });
     setAnswers(finalAnswers);
+    const totalDuration = mode === "simulado" ? pool.length * 2 * 60 - seconds : seconds;
     recordActivity({
       kind: mode,
       course,
       correct,
       total: pool.length,
-      durationSeconds: mode === "simulado" ? 30 * 60 - seconds : seconds,
+      durationSeconds: Math.max(1, totalDuration),
       subjects,
     });
     setHistoryCount((count) => count + 1);
@@ -275,6 +311,8 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
   };
 
   if (!started) {
+    const questionsAvailableCount = allQuestions.filter((q) => q.course === course).length;
+
     return (
       <div className="quiz-start panel-card">
         <div className="quiz-start-copy">
@@ -283,31 +321,101 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
           <p>{mode === "simulado" ? t.configDescSim : t.configDescQuest}</p>
         </div>
 
+        {/* Course / License Selector */}
         <div className="course-selector" role="radiogroup" aria-label="Escolha a trilha">
-          {courseList.map((item) => (
-            <button
-              type="button"
-              key={item.code}
-              className={course === item.code ? "course-choice active" : "course-choice"}
-              onClick={() => {
-                soundEngine.playClick();
-                setCourse(item.code);
-              }}
-            >
-              <b>{item.shortTitle}</b>
-              <span>{item.title}</span>
-              <small>{allQuestions.filter((q) => q.course === item.code).length} {t.questionsCount}</small>
-            </button>
-          ))}
+          {courseList.map((item) => {
+            const count = allQuestions.filter((q) => q.course === item.code).length;
+            return (
+              <button
+                type="button"
+                key={item.code}
+                className={course === item.code ? "course-choice active" : "course-choice"}
+                onClick={() => {
+                  soundEngine.playClick();
+                  setCourse(item.code);
+                  setSelectedSubject("ALL");
+                }}
+              >
+                <b>{item.shortTitle}</b>
+                <span>{item.title}</span>
+                <small>{count} {t.questionsCount} disponíveis</small>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Question Amount Selector */}
+        <div className="quiz-options-section">
+          <div className="quiz-option-block">
+            <span className="quiz-option-heading">
+              <Layers size={15} className="text-cyan" /> {t.questionAmountLabel}
+            </span>
+            <div className="quiz-chips-row">
+              {[5, 10, 15].map((amt) => (
+                <button
+                  type="button"
+                  key={amt}
+                  className={`filter-pill ${questionCount === amt ? "active" : ""}`}
+                  onClick={() => {
+                    soundEngine.playClick();
+                    setQuestionCount(amt);
+                  }}
+                >
+                  <Zap size={13} />
+                  <span>{amt} {t.questionsCount}</span>
+                  {mode === "simulado" && <small>({amt * 2} min)</small>}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Subject Filter Selector */}
+          <div className="quiz-option-block">
+            <span className="quiz-option-heading">
+              <Filter size={15} className="text-cyan" /> {t.filterSubjectLabel}
+            </span>
+            <div className="quiz-chips-row">
+              <button
+                type="button"
+                className={`filter-pill ${selectedSubject === "ALL" ? "active" : ""}`}
+                onClick={() => {
+                  soundEngine.playClick();
+                  setSelectedSubject("ALL");
+                }}
+              >
+                <BookOpen size={13} />
+                <span>{t.allSubjects} ({questionsAvailableCount})</span>
+              </button>
+              {courseSubjects.map((sub) => {
+                const subCount = allQuestions.filter((q) => q.course === course && q.subject === sub).length;
+                return (
+                  <button
+                    type="button"
+                    key={sub}
+                    className={`filter-pill ${selectedSubject === sub ? "active" : ""}`}
+                    onClick={() => {
+                      soundEngine.playClick();
+                      setSelectedSubject(sub);
+                    }}
+                  >
+                    <span>{sub} ({subCount})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         <div className="quiz-start-footer">
           <span>
-            <Clock3 size={17} className="text-cyan" /> {mode === "simulado" ? t.timeLimit : t.progressiveTimer}
+            <Clock3 size={17} className="text-cyan" />{" "}
+            {mode === "simulado"
+              ? `${t.timeLimit} (${questionCount * 2} min)`
+              : t.progressiveTimer}
           </span>
           <span className="activities-tag">{historyCount} {t.activitiesCompleted}</span>
           <button type="button" className="button button-primary" onClick={start}>
-            {t.startBtn} {mode === "simulado" ? "simulado" : "prática"} <span>→</span>
+            {t.startBtn} {mode === "simulado" ? "Simulado" : "Treino"} <span>→</span>
           </button>
         </div>
       </div>
@@ -319,7 +427,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
     const summaryText = t.resultSummary
       .replace("{correct}", String(result.correct))
       .replace("{total}", String(pool.length))
-      .replace("{time}", timeLabel(mode === "simulado" ? 30 * 60 - seconds : seconds));
+      .replace("{time}", timeLabel(mode === "simulado" ? pool.length * 2 * 60 - seconds : seconds));
 
     const isPassed = percent >= 70;
 
@@ -327,20 +435,20 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
       <div className="quiz-result">
         <div className="result-summary panel-card">
           <div className="result-icon">
-            <Trophy size={32} className="trophy-pulse-icon" />
+            <Trophy size={34} className="trophy-pulse-icon" />
           </div>
           <span className="section-kicker">{t.finalResult}</span>
           <div className="result-score-badge-wrap">
             <h2>{percent}% {t.accuracy}</h2>
             <span className={`result-status-tag ${isPassed ? "is-passed" : "is-failed"}`}>
-              {isPassed ? "✓ APROVADO NA MATÉRIA" : "REFORÇAR MATÉRIA"}
+              {isPassed ? "✓ APROVADO — PADRÃO DE VOO ATINGIDO" : "NECESSITA REFORÇO — ABAIXO DE 70%"}
             </span>
           </div>
           <p>{summaryText}</p>
           <div className="result-gauge">
             <i style={{ width: `${percent}%` }} />
           </div>
-          <button type="button" className="button button-primary" onClick={start}>
+          <button type="button" className="button button-primary" onClick={() => setStarted(false)}>
             <RotateCcw size={16} /> {t.redoBtn}
           </button>
         </div>
@@ -353,7 +461,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
               <div className="subject-row" key={subject}>
                 <div>
                   <b>{subject}</b>
-                  <span>{score.correct}/{score.total}</span>
+                  <span>{score.correct}/{score.total} acertos</span>
                 </div>
                 <div className="mini-bar">
                   <i style={{ width: `${value}%` }} />
@@ -413,8 +521,8 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
             >
               <span>{String.fromCharCode(65 + optionIndex)}</span>
               <b>{option}</b>
-              {confirmed && isCorrect && <CheckCircle2 size={19} className="text-green" />}
-              {confirmed && isWrong && <XCircle size={19} className="text-danger" />}
+              {confirmed && isCorrect && <CheckCircle2 size={20} className="text-green" />}
+              {confirmed && isWrong && <XCircle size={20} className="text-danger" />}
             </button>
           );
         })}
