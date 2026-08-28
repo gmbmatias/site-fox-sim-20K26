@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Clock3, Flame, Target, TimerReset, TrendingUp, Check, ChevronRight } from "lucide-react";
+import { BookOpen, CheckCircle2, Clock3, Flame, Target, TimerReset, TrendingUp, Check, ChevronRight, Sparkles, Trophy, Compass, Award } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ValidLocale, getBcp47Lang } from "@/lib/i18n";
 import { getCourses } from "@/lib/translations/courses";
 import { emptyProgress, loadProgress, type FoxProgress } from "@/lib/progress";
+import { soundEngine } from "./GlobalInteractivity";
 
 const STRINGS: Record<ValidLocale, {
   timeStudied: string;
@@ -100,203 +101,232 @@ const STRINGS: Record<ValidLocale, {
     streakTitle: "STUDY STREAK",
     dayLabel: "day",
     daysLabel: "days",
-    streakDesc: "Completing a study session today keeps your streak alive.",
-    reviewKicker: "REVISION QUEUE",
-    reviewTitle: "Subjects to reinforce",
-    reviewEmpty: "Answer practice questions. Topics scored below 70% will automatically appear here for review.",
+    streakDesc: "Completing one study block today maintains your active streak.",
+    reviewKicker: "REVIEW QUEUE",
+    reviewTitle: "Topics for reinforcement",
+    reviewEmpty: "Answer questions to populate your review queue based on performance.",
     reviewPriority: "priority",
     startReview: "Start targeted review",
     goalsKicker: "GOAL CHECKLIST",
     goal1: "Complete 1 Pomodoro session",
     goal2: "Answer 10 practice questions",
-    goal3: "Finish a full mock exam",
-    goal4: "Complete 3 syllabus lessons",
+    goal3: "Complete 1 mock exam",
+    goal4: "Finish 3 ground school lessons",
   },
   es: {
-    timeStudied: "TIEMPO ESTUDIADO",
+    timeStudied: "TIEMPO DE ESTUDIO",
     dailyGoal: "Meta diaria: {goal} min",
     pomodoroSessions: "SESIONES POMODORO",
-    focusRecorded: "Foco guardado en el dispositivo",
+    focusRecorded: "Foco registrado en este equipo",
     questionsAnswered: "PREGUNTAS RESPONDIDAS",
     correctAnswers: "{correct} respuestas correctas",
     accuracyRate: "TASA DE ACIERTO",
     simulationsCompleted: "{count} exámenes completados",
-    tracksKicker: "PLAN DE ESTUDIOS",
+    tracksKicker: "RUTAS DE FORMACIÓN",
     tracksTitle: "Tu plan de vuelo",
-    viewAll: "Ver todos",
+    viewAll: "Ver todas",
     lessonsCompleted: "{done} de {total} lecciones",
-    historyKicker: "HISTORIAL OPERATIVO",
+    historyKicker: "HISTORIAL OPERACIONAL",
     historyTitle: "Actividad reciente",
     emptyHistoryTitle: "Tu historial comienza con tu primera práctica",
-    emptyHistoryDesc: "Responde preguntas o completa un examen para desbloquear el análisis de tu progreso.",
+    emptyHistoryDesc: "Responde preguntas para visualizar tu evolución y métricas detalladas.",
     practiceNowBtn: "Practicar ahora",
-    simulatedKind: "Examen de práctica",
+    simulatedKind: "Simulado",
     practiceKind: "Práctica de preguntas",
     streakTitle: "RACHA DE ESTUDIO",
     dayLabel: "día",
     daysLabel: "días",
     streakDesc: "Una sesión completada hoy mantiene activa tu racha de estudio.",
     reviewKicker: "COLA DE REPASO",
-    reviewTitle: "Materias a reforzar",
-    reviewEmpty: "Responde preguntas. Los temas con menos del 70% de aciertos aparecerán aquí automáticamente.",
+    reviewTitle: "Temas para reforzar",
+    reviewEmpty: "Los temas con acierto inferior al 70% aparecerán automáticamente aquí.",
     reviewPriority: "prioridad",
     startReview: "Iniciar repaso prioritario",
     goalsKicker: "CHECKLIST DE METAS",
-    goal1: "Completar 1 sesión Pomodoro",
+    goal1: "Completar una sesión Pomodoro",
     goal2: "Responder 10 preguntas",
-    goal3: "Finalizar 1 examen de práctica",
-    goal4: "Completar 3 lecciones",
+    goal3: "Finalizar un simulado",
+    goal4: "Completar 3 lecciones teóricas",
   },
   fr: {
     timeStudied: "TEMPS ÉTUDIÉ",
-    dailyGoal: "Objectif quotidien : {goal} min",
+    dailyGoal: "Objectif du jour : {goal} min",
     pomodoroSessions: "SESSIONS POMODORO",
-    focusRecorded: "Focus enregistré sur l'appareil",
-    questionsAnswered: "QUESTIONS RÉPONDUES",
+    focusRecorded: "Focus enregistré localement",
+    questionsAnswered: "QUESTIONS TRAITÉES",
     correctAnswers: "{correct} réponses correctes",
     accuracyRate: "TAUX DE RÉUSSITE",
     simulationsCompleted: "{count} examens blancs terminés",
-    tracksKicker: "PARCOURS D'ÉTUDES",
+    tracksKicker: "PARCOURS DE FORMATION",
     tracksTitle: "Votre plan de vol",
-    viewAll: "Tout voir",
+    viewAll: "Tout afficher",
     lessonsCompleted: "{done} sur {total} leçons",
-    historyKicker: "JOURNAL OPÉRATIONNEL",
+    historyKicker: "CARNET DE BORD",
     historyTitle: "Activité récente",
-    emptyHistoryTitle: "Votre historique débute avec votre première session",
-    emptyHistoryDesc: "Répondez à des questions ou passez un examen blanc pour visualiser vos progrès.",
+    emptyHistoryTitle: "Votre carnet débutera à la première session",
+    emptyHistoryDesc: "Répondez aux questions pour visualiser vos statistiques de progression.",
     practiceNowBtn: "S'entraîner",
-    simulatedKind: "Examen blanc",
-    practiceKind: "Pratique de questions",
-    streakTitle: "SÉRIE D'ÉTUDES",
+    simulatedKind: "Examen Blanc",
+    practiceKind: "Entraînement",
+    streakTitle: "SÉRIE D'ÉTUDE",
     dayLabel: "jour",
     daysLabel: "jours",
-    streakDesc: "Une session aujourd'hui maintient votre série d'études active.",
+    streakDesc: "Une session validée aujourd'hui maintient votre série active.",
     reviewKicker: "FILE DE RÉVISION",
-    reviewTitle: "Sujets à renforcer",
-    reviewEmpty: "Répondez aux questions. Les thèmes sous 70 % de réussite s'afficheront ici pour révision.",
+    reviewTitle: "Thèmes à renforcer",
+    reviewEmpty: "Les notions avec moins de 70% de réussite apparaîtront ici pour révision.",
     reviewPriority: "priorité",
-    startReview: "Démarrer la révision",
-    goalsKicker: "CHECKLIST D'OBJECTIFS",
+    startReview: "Lancer la révision",
+    goalsKicker: "OBJECTIFS DU JOUR",
     goal1: "Terminer une session Pomodoro",
     goal2: "Répondre à 10 questions",
-    goal3: "Valider un examen blanc",
-    goal4: "Terminer 3 leçons théoriques",
+    goal3: "Compléter un examen blanc",
+    goal4: "Valider 3 leçons théoriques",
   },
 };
 
 export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }) {
-  const t = STRINGS[locale] || STRINGS["pt-br"];
-  const bcp47 = getBcp47Lang(locale);
-  const courseList = getCourses(locale);
-
   const [progress, setProgress] = useState<FoxProgress>(emptyProgress);
+  const [customCheckedGoals, setCustomCheckedGoals] = useState<Record<number, boolean>>({});
+  const t = STRINGS[locale] || STRINGS["pt-br"];
+  const courses = getCourses(locale);
+  const bcp47 = getBcp47Lang(locale);
 
   useEffect(() => {
-    const update = () => setProgress(loadProgress());
-    update();
-    window.addEventListener("foxsim-progress", update);
-    return () => window.removeEventListener("foxsim-progress", update);
+    const timer = window.setTimeout(() => {
+      setProgress(loadProgress());
+      try {
+        const savedGoals = JSON.parse(localStorage.getItem("foxsim_dashboard_goals") || "{}");
+        setCustomCheckedGoals(savedGoals);
+      } catch {
+        // ignore
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  const accuracy = progress.questionsAnswered
-    ? Math.round((progress.correctAnswers / progress.questionsAnswered) * 100)
-    : 0;
+  const triggerToast = (message: string, type: "success" | "info" = "info") => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("foxsim-toast", { detail: { message, type } }));
+    }
+  };
+
+  const toggleGoal = (idx: number, label: string) => {
+    soundEngine.playChirp();
+    const next = { ...customCheckedGoals, [idx]: !customCheckedGoals[idx] };
+    setCustomCheckedGoals(next);
+
+    try {
+      localStorage.setItem("foxsim_dashboard_goals", JSON.stringify(next));
+    } catch {
+      // ignore
+    }
+
+    if (next[idx]) {
+      soundEngine.playSuccess();
+      triggerToast(`✓ Meta alcançada: "${label}"! +25 XP`, "success");
+    }
+  };
+
   const simulations = progress.activities.filter((item) => item.kind === "simulado");
-  const reviews = Object.entries(progress.reviewTopics)
-    .filter(([, count]) => count > 0)
-    .sort((a, b) => b[1] - a[1]);
+  const accuracy = Math.round(
+    (progress.correctAnswers / (progress.questionsAnswered || 1)) * 100
+  );
+
+  const reviews = Object.entries(progress.reviewQueue).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="dashboard-layout">
-      {/* 4 Main Metrics Top Grid */}
-      <div className="dashboard-metrics-grid">
-        <div className="metric-panel-card panel-card">
-          <div className="metric-panel-header">
-            <span className="metric-kicker">{t.timeStudied}</span>
-            <span className="metric-icon"><Clock3 size={17} /></span>
+      {/* Top 4 Cockpit Metrics Cards */}
+      <section className="dashboard-metrics-grid" aria-label="Métricas principais">
+        <div className="panel-card dashboard-metric-card">
+          <div className="metric-icon-wrap time">
+            <Clock3 size={20} />
           </div>
-          <strong className="metric-main-val">
-            {Math.floor(progress.studyMinutes / 60)}h {progress.studyMinutes % 60}min
-          </strong>
-          <p className="metric-sub-note">{t.dailyGoal.replace("{goal}", String(progress.dailyGoal))}</p>
+          <span className="metric-kicker-label">{t.timeStudied}</span>
+          <strong className="metric-big-number">{progress.totalMinutes} min</strong>
+          <small className="metric-sub-label">
+            {t.dailyGoal.replace("{goal}", String(progress.dailyGoal))}
+          </small>
         </div>
 
-        <div className="metric-panel-card panel-card">
-          <div className="metric-panel-header">
-            <span className="metric-kicker">{t.pomodoroSessions}</span>
-            <span className="metric-icon"><TimerReset size={17} /></span>
+        <div className="panel-card dashboard-metric-card">
+          <div className="metric-icon-wrap pomodoro">
+            <TimerReset size={20} />
           </div>
-          <strong className="metric-main-val">{progress.pomodoroSessions}</strong>
-          <p className="metric-sub-note">{t.focusRecorded}</p>
+          <span className="metric-kicker-label">{t.pomodoroSessions}</span>
+          <strong className="metric-big-number">{progress.pomodoroSessions}</strong>
+          <small className="metric-sub-label">{t.focusRecorded}</small>
         </div>
 
-        <div className="metric-panel-card panel-card">
-          <div className="metric-panel-header">
-            <span className="metric-kicker">{t.questionsAnswered}</span>
-            <span className="metric-icon"><CheckCircle2 size={17} /></span>
+        <div className="panel-card dashboard-metric-card">
+          <div className="metric-icon-wrap questions">
+            <Target size={20} />
           </div>
-          <strong className="metric-main-val">{progress.questionsAnswered}</strong>
-          <p className="metric-sub-note">{t.correctAnswers.replace("{correct}", String(progress.correctAnswers))}</p>
+          <span className="metric-kicker-label">{t.questionsAnswered}</span>
+          <strong className="metric-big-number">{progress.questionsAnswered}</strong>
+          <small className="metric-sub-label">
+            {t.correctAnswers.replace("{correct}", String(progress.correctAnswers))}
+          </small>
         </div>
 
-        <div className="metric-panel-card panel-card">
-          <div className="metric-panel-header">
-            <span className="metric-kicker">{t.accuracyRate}</span>
-            <span className="metric-icon"><Target size={17} /></span>
+        <div className="panel-card dashboard-metric-card">
+          <div className="metric-icon-wrap accuracy">
+            <TrendingUp size={20} />
           </div>
-          <strong className="metric-main-val">{accuracy}%</strong>
-          <p className="metric-sub-note">{t.simulationsCompleted.replace("{count}", String(simulations.length))}</p>
+          <span className="metric-kicker-label">{t.accuracyRate}</span>
+          <strong className="metric-big-number">{accuracy}%</strong>
+          <small className="metric-sub-label">
+            {t.simulationsCompleted.replace("{count}", String(simulations.length))}
+          </small>
         </div>
-      </div>
+      </section>
 
-      {/* Main 2-Column Content Grid */}
+      {/* Main 2-Column Dashboard Layout */}
       <div className="dashboard-columns-grid">
-        {/* Left Column: Courses & History */}
+        {/* Left Primary Section: Course Tracks & Activity Log */}
         <section className="dashboard-main-column">
-          {/* Ground School Tracks Progress */}
+          {/* Ground School Tracks */}
           <div className="panel-card dashboard-section-card">
             <div className="dashboard-card-head">
               <div>
                 <span className="section-kicker">{t.tracksKicker}</span>
                 <h2>{t.tracksTitle}</h2>
               </div>
-              <Link href={`/${locale}/estudos`}>
+              <Link className="dashboard-head-link" href={`/${locale}/estudos`}>
                 {t.viewAll} <span>→</span>
               </Link>
             </div>
 
             <div className="dashboard-courses-grid">
-              {courseList.map((course) => {
-                const lessons = course.modules.flatMap((m) => m.lessons);
-                const done = lessons.filter((l) => progress.completedLessons.includes(l.id)).length;
-                const percent = Math.round((done / (lessons.length || 1)) * 100);
+              {courses.map((course) => {
+                const total = course.modules.flatMap((m) => m.lessons).length;
+                const done = course.modules
+                  .flatMap((m) => m.lessons)
+                  .filter((l) => progress.completedLessons.includes(l.id)).length;
+                const percent = Math.round((done / (total || 1)) * 100);
+
                 return (
                   <Link
-                    href={`/${locale}/estudos/${course.code}`}
-                    className="dashboard-course-item"
                     key={course.code}
+                    className="dashboard-course-card panel-card"
+                    href={`/${locale}/estudos/${course.code}`}
+                    onClick={() => soundEngine.playClick()}
                   >
                     <div className="dashboard-course-top">
-                      <span
-                        className="course-pill-badge"
-                        style={{
-                          color: course.accent,
-                          borderColor: `${course.accent}66`,
-                          backgroundColor: `${course.accent}14`,
-                        }}
-                      >
+                      <span className="dashboard-course-badge" style={{ color: course.accent, borderColor: course.accent }}>
                         {course.shortTitle}
                       </span>
                       <strong className="dashboard-course-pct">{percent}%</strong>
                     </div>
 
                     <div className="dashboard-course-info">
-                      <b className="dashboard-course-title">{course.title}</b>
-                      <span className="dashboard-course-lessons">
+                      <h3>{course.title}</h3>
+                      <p>
                         {t.lessonsCompleted
                           .replace("{done}", String(done))
-                          .replace("{total}", String(lessons.length))}
-                      </span>
+                          .replace("{total}", String(total))}
+                      </p>
                     </div>
 
                     <div className="dashboard-progress-track">
@@ -320,11 +350,11 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
             {progress.activities.length === 0 ? (
               <div className="dashboard-empty-state">
                 <div className="empty-icon-circle">
-                  <BookOpen size={24} />
+                  <BookOpen size={24} className="text-cyan" />
                 </div>
                 <h3>{t.emptyHistoryTitle}</h3>
                 <p>{t.emptyHistoryDesc}</p>
-                <Link className="button button-primary" href={`/${locale}/questoes`}>
+                <Link className="button button-primary" href={`/${locale}/questoes`} onClick={() => soundEngine.playClick()}>
                   {t.practiceNowBtn} <span>→</span>
                 </Link>
               </div>
@@ -369,10 +399,10 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
 
         {/* Right Sidebar: Streak, Revision & Goal Checklist */}
         <aside className="dashboard-sidebar-column">
-          {/* Study Streak Card */}
+          {/* Study Streak Card with Animated Flame */}
           <div className="panel-card streak-dashboard-card">
             <div className="streak-icon-box">
-              <Flame size={26} fill="currentColor" />
+              <Flame size={28} className="streak-flame-icon" />
             </div>
             <div className="streak-copy-wrap">
               <span className="streak-kicker-tag">{t.streakTitle}</span>
@@ -401,42 +431,38 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
                 ))}
               </div>
             )}
-            <Link href={`/${locale}/questoes`} className="review-cta-link">
+            <Link href={`/${locale}/questoes`} className="review-cta-link" onClick={() => soundEngine.playClick()}>
               {t.startReview} <span>→</span>
             </Link>
           </div>
 
-          {/* Goals Checklist Card */}
+          {/* Interactive Goals Checklist Card */}
           <div className="panel-card goals-dashboard-card">
             <span className="section-kicker">{t.goalsKicker}</span>
             <div className="goals-checklist-list">
-              <div className={progress.pomodoroSessions > 0 ? "goal-check-row is-completed" : "goal-check-row"}>
-                <span className="goal-check-box">
-                  {progress.pomodoroSessions > 0 && <Check size={13} />}
-                </span>
-                <span className="goal-check-text">{t.goal1}</span>
-              </div>
+              {[
+                { label: t.goal1, isAuto: progress.pomodoroSessions > 0 },
+                { label: t.goal2, isAuto: progress.questionsAnswered >= 10 },
+                { label: t.goal3, isAuto: simulations.length > 0 },
+                { label: t.goal4, isAuto: progress.completedLessons.length >= 3 },
+              ].map((goal, gIdx) => {
+                const isCompleted = goal.isAuto || !!customCheckedGoals[gIdx];
 
-              <div className={progress.questionsAnswered >= 10 ? "goal-check-row is-completed" : "goal-check-row"}>
-                <span className="goal-check-box">
-                  {progress.questionsAnswered >= 10 && <Check size={13} />}
-                </span>
-                <span className="goal-check-text">{t.goal2}</span>
-              </div>
-
-              <div className={simulations.length > 0 ? "goal-check-row is-completed" : "goal-check-row"}>
-                <span className="goal-check-box">
-                  {simulations.length > 0 && <Check size={13} />}
-                </span>
-                <span className="goal-check-text">{t.goal3}</span>
-              </div>
-
-              <div className={progress.completedLessons.length >= 3 ? "goal-check-row is-completed" : "goal-check-row"}>
-                <span className="goal-check-box">
-                  {progress.completedLessons.length >= 3 && <Check size={13} />}
-                </span>
-                <span className="goal-check-text">{t.goal4}</span>
-              </div>
+                return (
+                  <button
+                    key={gIdx}
+                    type="button"
+                    onClick={() => toggleGoal(gIdx, goal.label)}
+                    className={`goal-check-row ${isCompleted ? "is-completed" : ""}`}
+                    title="Clique para marcar / desmarcar meta"
+                  >
+                    <span className="goal-check-box">
+                      {isCompleted && <Check size={13} className="text-night" />}
+                    </span>
+                    <span className="goal-check-text">{goal.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </aside>

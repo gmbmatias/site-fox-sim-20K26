@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, BookOpen, Search, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, Search, X, Sparkles } from "lucide-react";
 import { ValidLocale } from "@/lib/i18n";
 import { type GlossaryTerm } from "@/lib/translations/glossary";
+import { soundEngine } from "./GlobalInteractivity";
 
 interface GlossaryDirectoryProps {
   locale: ValidLocale;
@@ -44,7 +45,7 @@ const STRINGS: Record<ValidLocale, {
     showingCount: "{count} términos indexados",
     noResultsTitle: "No se encontraron términos",
     noResultsDesc: "Intenta con otra sigla o selecciona otra categoría.",
-    clearFilters: "Limpiar búsqueda",
+    clearFilters: "Limpar búsqueda",
     readDetailed: "Ver explicación detallada",
   },
   fr: {
@@ -84,6 +85,17 @@ export function GlossaryDirectory({ locale = "pt-br", terms }: GlossaryDirectory
     });
   }, [terms, search, selectedCategory]);
 
+  const handleSelectCategory = (cat: string) => {
+    soundEngine.playClick();
+    setSelectedCategory(cat);
+  };
+
+  const handleClear = () => {
+    soundEngine.playChirp();
+    setSearch("");
+    setSelectedCategory("all");
+  };
+
   return (
     <div className="glossary-directory-wrap">
       {/* Search & Category Filter Controls */}
@@ -101,7 +113,7 @@ export function GlossaryDirectory({ locale = "pt-br", terms }: GlossaryDirectory
             <button
               type="button"
               className="glossary-clear-btn"
-              onClick={() => setSearch("")}
+              onClick={handleClear}
               aria-label={t.clearFilters}
             >
               <X size={15} />
@@ -109,26 +121,31 @@ export function GlossaryDirectory({ locale = "pt-br", terms }: GlossaryDirectory
           )}
         </div>
 
-        <div className="glossary-category-pills">
+        {/* Category Pills */}
+        <div className="glossary-category-pills" role="radiogroup" aria-label="Categorias do glossário">
           <button
             type="button"
-            className={selectedCategory === "all" ? "category-pill-btn active" : "category-pill-btn"}
-            onClick={() => setSelectedCategory("all")}
+            className={selectedCategory === "all" ? "filter-pill active" : "filter-pill"}
+            onClick={() => handleSelectCategory("all")}
           >
-            {t.allCategory}
+            {t.allCategory} ({terms.length})
           </button>
-          {categories.map((cat) => (
-            <button
-              type="button"
-              key={cat}
-              className={selectedCategory === cat ? "category-pill-btn active" : "category-pill-btn"}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const count = terms.filter((item) => item.category === cat).length;
+            return (
+              <button
+                type="button"
+                key={cat}
+                className={selectedCategory === cat ? "filter-pill active" : "filter-pill"}
+                onClick={() => handleSelectCategory(cat)}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
         </div>
 
+        {/* Count Bar */}
         <div className="glossary-stats-bar">
           <span className="glossary-count-tag">
             {t.showingCount.replace("{count}", String(filteredTerms.length))}
@@ -137,10 +154,7 @@ export function GlossaryDirectory({ locale = "pt-br", terms }: GlossaryDirectory
             <button
               type="button"
               className="glossary-reset-link"
-              onClick={() => {
-                setSearch("");
-                setSelectedCategory("all");
-              }}
+              onClick={handleClear}
             >
               {t.clearFilters}
             </button>
@@ -148,49 +162,53 @@ export function GlossaryDirectory({ locale = "pt-br", terms }: GlossaryDirectory
         </div>
       </div>
 
-      {/* 3-Column Glossary Cards Grid */}
-      {filteredTerms.length > 0 ? (
+      {/* Grid of Glossary Cards */}
+      {filteredTerms.length === 0 ? (
+        <div className="panel-card glossary-empty-box">
+          <BookOpen size={36} className="text-cyan mb-3" />
+          <h3>{t.noResultsTitle}</h3>
+          <p>{t.noResultsDesc}</p>
+          <button
+            type="button"
+            className="button button-secondary mt-3"
+            onClick={handleClear}
+          >
+            {t.clearFilters}
+          </button>
+        </div>
+      ) : (
         <div className="glossary-cards-grid">
-          {filteredTerms.map((term) => (
-            <article key={term.slug} className="glossary-card panel-card">
+          {filteredTerms.map((item) => (
+            <article className="glossary-card panel-card" key={item.slug}>
               <header className="glossary-card-header">
                 <div className="glossary-card-top-meta">
-                  <span className="glossary-badge">{term.category}</span>
-                  {term.phoneticOrAcronym && (
-                    <small className="glossary-acronym-tag">{term.phoneticOrAcronym}</small>
-                  )}
+                  <span className="glossary-badge">{item.category}</span>
+                  <span className="glossary-acronym-tag">{item.phoneticOrAcronym}</span>
                 </div>
                 <h2 className="glossary-card-term">
-                  <Link href={`/${locale}/glossario/${term.slug}`}>{term.term}</Link>
+                  <Link
+                    href={`/${locale}/glossario/${item.slug}`}
+                    onClick={() => soundEngine.playClick()}
+                  >
+                    {item.term}
+                  </Link>
                 </h2>
               </header>
-              <p className="glossary-card-def">{term.shortDefinition}</p>
+
+              <p className="glossary-card-def">{item.shortDefinition}</p>
+
               <footer className="glossary-card-footer">
-                <Link href={`/${locale}/glossario/${term.slug}`} className="glossary-read-link">
+                <Link
+                  className="glossary-read-link"
+                  href={`/${locale}/glossario/${item.slug}`}
+                  onClick={() => soundEngine.playClick()}
+                >
                   <span>{t.readDetailed}</span>
                   <ArrowUpRight size={15} />
                 </Link>
               </footer>
             </article>
           ))}
-        </div>
-      ) : (
-        <div className="glossary-empty-box panel-card">
-          <div className="empty-icon-ring">
-            <BookOpen size={24} />
-          </div>
-          <h3>{t.noResultsTitle}</h3>
-          <p>{t.noResultsDesc}</p>
-          <button
-            type="button"
-            className="button button-primary"
-            onClick={() => {
-              setSearch("");
-              setSelectedCategory("all");
-            }}
-          >
-            {t.clearFilters}
-          </button>
         </div>
       )}
     </div>

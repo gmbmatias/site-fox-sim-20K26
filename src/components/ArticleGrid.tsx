@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, Clock3, Search, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, Clock3, Search, X, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ValidLocale } from "@/lib/i18n";
 import { getArticles, getArticleCategories } from "@/lib/translations/articles";
 import { getUi } from "@/lib/translations/ui";
+import { soundEngine } from "./GlobalInteractivity";
 
 const STRINGS: Record<ValidLocale, {
   searchPlaceholder: string;
@@ -76,6 +77,17 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
     });
   }, [articles, category, search]);
 
+  const handleSelectCategory = (cat: string) => {
+    soundEngine.playClick();
+    setCategory(cat);
+  };
+
+  const handleClear = () => {
+    soundEngine.playChirp();
+    setSearch("");
+    setCategory("all");
+  };
+
   return (
     <div className="articles-directory-wrap">
       {/* Search & Category Filter Controls */}
@@ -93,7 +105,7 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
             <button
               type="button"
               className="articles-clear-btn"
-              onClick={() => setSearch("")}
+              onClick={handleClear}
               aria-label={t.clearFilters}
             >
               <X size={15} />
@@ -101,26 +113,31 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
           )}
         </div>
 
-        <div className="articles-category-pills">
+        {/* Category Pills */}
+        <div className="articles-category-pills" role="radiogroup" aria-label="Categorias de artigos">
           <button
             type="button"
-            className={category === "all" ? "category-pill-btn active" : "category-pill-btn"}
-            onClick={() => setCategory("all")}
+            className={category === "all" ? "filter-pill active" : "filter-pill"}
+            onClick={() => handleSelectCategory("all")}
           >
-            {t.allFilter}
+            {t.allFilter} ({articles.length})
           </button>
-          {categories.map((item) => (
-            <button
-              type="button"
-              className={category === item ? "category-pill-btn active" : "category-pill-btn"}
-              onClick={() => setCategory(item)}
-              key={item}
-            >
-              {item}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const count = articles.filter((a) => a.category === cat).length;
+            return (
+              <button
+                type="button"
+                key={cat}
+                className={category === cat ? "filter-pill active" : "filter-pill"}
+                onClick={() => handleSelectCategory(cat)}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
         </div>
 
+        {/* Count Bar */}
         <div className="articles-stats-bar">
           <span className="articles-count-tag">
             {t.showingCount.replace("{count}", String(visible.length))}
@@ -129,10 +146,7 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
             <button
               type="button"
               className="articles-reset-link"
-              onClick={() => {
-                setSearch("");
-                setCategory("all");
-              }}
+              onClick={handleClear}
             >
               {t.clearFilters}
             </button>
@@ -140,18 +154,29 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
         </div>
       </div>
 
-      {/* 3-Column Articles Grid */}
-      {visible.length > 0 ? (
+      {/* 3-Column Grid of Articles */}
+      {visible.length === 0 ? (
+        <div className="panel-card articles-empty-box">
+          <BookOpen size={36} className="text-cyan mb-3" />
+          <h3>{t.noResultsTitle}</h3>
+          <p>{t.noResultsDesc}</p>
+          <button
+            type="button"
+            className="button button-secondary mt-3"
+            onClick={handleClear}
+          >
+            {t.clearFilters}
+          </button>
+        </div>
+      ) : (
         <div className="articles-cards-grid">
-          {visible.map((article, index) => (
-            <Link
-              className="article-card panel-card"
-              href={`/${locale}/artigos/${article.slug}`}
-              key={article.slug}
-            >
+          {visible.map((article, idx) => (
+            <article className="article-card panel-card" key={article.slug}>
               <div className="article-visual-band">
-                <span className="article-number-badge">{String(index + 1).padStart(2, "0")}</span>
-                <span className="article-brand-kicker">FOX // KNOWLEDGE</span>
+                <span className="article-number-badge">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <span className="article-brand-kicker">FOX SIM KNOWLEDGE</span>
               </div>
               <div className="article-card-body">
                 <span className="article-category-badge">{article.category}</span>
@@ -161,31 +186,18 @@ export function ArticleGrid({ locale = "pt-br" }: { locale?: ValidLocale }) {
                   <span className="article-read-time">
                     <Clock3 size={13} /> {article.readTime} {t.readTime}
                   </span>
-                  <span className="article-arrow-icon">
-                    <ArrowUpRight size={16} />
-                  </span>
+                  <Link
+                    className="button button-primary article-card-btn"
+                    href={`/${locale}/artigos/${article.slug}`}
+                    onClick={() => soundEngine.playClick()}
+                  >
+                    <span>Ler artigo</span>
+                    <ArrowUpRight size={15} className="article-arrow-icon" />
+                  </Link>
                 </footer>
               </div>
-            </Link>
+            </article>
           ))}
-        </div>
-      ) : (
-        <div className="articles-empty-box panel-card">
-          <div className="empty-icon-ring">
-            <BookOpen size={24} />
-          </div>
-          <h3>{t.noResultsTitle}</h3>
-          <p>{t.noResultsDesc}</p>
-          <button
-            type="button"
-            className="button button-primary"
-            onClick={() => {
-              setSearch("");
-              setCategory("all");
-            }}
-          >
-            {t.clearFilters}
-          </button>
         </div>
       )}
     </div>

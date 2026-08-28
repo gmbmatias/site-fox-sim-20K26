@@ -4966,6 +4966,430 @@ img { max-width: 100%; height: auto; }
     justify-content: center;
   }
 }
+/* ==========================================================================
+   CROSSWIND COMPASS VISUALIZER & RUNWAY DIAGRAM
+   ========================================================================== */
+.crosswind-compass-visualizer {
+  margin: 16px 0 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(4, 11, 18, 0.85);
+  border: 1px solid rgba(79, 227, 219, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.compass-rose-container {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 2px dashed rgba(79, 227, 219, 0.35);
+  background: radial-gradient(circle, rgba(14, 28, 44, 0.9) 0%, rgba(6, 14, 24, 0.95) 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(79, 227, 219, 0.1);
+}
+.runway-graphic-bar {
+  position: absolute;
+  width: 26px;
+  height: 140px;
+  background: #18222d;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.rwy-num {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+.rwy-num.bottom {
+  transform: rotate(180deg);
+}
+.rwy-center-stripes {
+  width: 2px;
+  height: 60px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+.wind-vector-arrow {
+  position: absolute;
+  width: 4px;
+  height: 150px;
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wind-arrow-head {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid var(--orange);
+  filter: drop-shadow(0 0 4px rgba(255, 149, 0, 0.8));
+}
+.wind-arrow-shaft {
+  width: 3px;
+  height: 65px;
+  background: linear-gradient(to top, transparent, var(--orange));
+  border-radius: 2px;
+}
+.compass-aircraft-symbol {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(79, 227, 219, 0.6));
+}
+.crosswind-telemetry-summary {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.crosswind-telemetry-summary .telemetry-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.crosswind-telemetry-summary strong {
+  color: #fff;
+}
+
+/* ==========================================================================
+   TOD (TOP OF DESCENT) VISUAL PROFILE
+   ========================================================================== */
+.tod-visual-profile {
+  margin: 16px 0 20px;
+  padding: 18px 24px;
+  border-radius: 12px;
+  background: rgba(6, 14, 23, 0.8);
+  border: 1px solid rgba(79, 227, 219, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.tod-step-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 2;
+}
+.tod-step-point.cruise {
+  color: var(--cyan);
+}
+.tod-plane-icon {
+  transform: rotate(15deg);
+  animation: planeFloat 3s ease-in-out infinite;
+}
+@keyframes planeFloat {
+  0%, 100% { transform: rotate(15deg) translateY(0); }
+  50% { transform: rotate(15deg) translateY(-4px); }
+}
+.tod-step-point.target {
+  color: var(--orange);
+}
+.tod-descent-slope {
+  flex: 1;
+  margin: 0 24px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--cyan) 0,
+    var(--cyan) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.slope-distance-label,
+.slope-vs-label {
+  font-size: 11px;
+  color: #a0b6c2;
+  background: rgba(5, 12, 20, 0.92);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.slope-distance-label strong,
+.slope-vs-label strong {
+  color: var(--cyan);
+}
+
+/* ==========================================================================
+   STUDY TRACK ENHANCEMENTS
+   ========================================================================== */
+.course-completed-banner {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.course-completed-banner strong {
+  display: block;
+  font-size: 13px;
+  color: #ffc107;
+}
+.course-completed-banner small {
+  font-size: 11px;
+  color: #c9d6dc;
+}
+.study-module-nav {
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.module-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #a4b7c1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.module-nav-item:hover {
+  background: rgba(79, 227, 219, 0.08);
+  color: #fff;
+  transform: translateX(3px);
+}
+.module-nav-item.is-complete {
+  color: var(--cyan);
+  border-left: 2px solid var(--cyan);
+}
+.mod-nav-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+}
+.mod-nav-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mod-nav-count {
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+.module-completion-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  color: #9ab0bb;
+  border: 1px solid var(--line);
+}
+.module-completion-tag.is-complete {
+  background: rgba(79, 227, 219, 0.12);
+  color: var(--cyan);
+  border-color: rgba(79, 227, 219, 0.35);
+}
+.sidebar-action-btn {
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.lesson-summary-box {
+  margin-bottom: 16px;
+  line-height: 1.65;
+  color: #d1dde4;
+}
+.lesson-objectives-box {
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(4, 11, 18, 0.6);
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.lesson-objectives-box b {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.lesson-objectives-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lesson-objectives-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #b2c5d0;
+  line-height: 1.5;
+}
+.objective-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   QUIZ & SIMULADOS POLISH
+   ========================================================================== */
+.quiz-course-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+.quiz-timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+.result-score-badge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.result-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.result-status-tag.is-passed {
+  background: rgba(79, 227, 219, 0.15);
+  color: var(--cyan);
+  border: 1px solid rgba(79, 227, 219, 0.35);
+}
+.result-status-tag.is-failed {
+  background: rgba(255, 87, 87, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 87, 87, 0.35);
+}
+.trophy-pulse-icon {
+  animation: trophyPulse 2s ease-in-out infinite;
+  color: #ffd166;
+}
+@keyframes trophyPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.4)); }
+  50% { transform: scale(1.12); filter: drop-shadow(0 0 16px rgba(255, 209, 102, 0.8)); }
+}
+
+/* ==========================================================================
+   STREAK FLAME & GOALS INTERACTIVITY
+   ========================================================================== */
+.streak-flame-icon {
+  color: #ff7a00;
+  animation: flameFlicker 1.8s ease-in-out infinite alternate;
+}
+@keyframes flameFlicker {
+  0% { transform: scale(1) rotate(-2deg); filter: drop-shadow(0 0 6px rgba(255, 122, 0, 0.6)); }
+  50% { transform: scale(1.08) rotate(3deg); filter: drop-shadow(0 0 14px rgba(255, 122, 0, 0.9)); }
+  100% { transform: scale(1.02) rotate(-1deg); filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.7)); }
+}
+button.goal-check-row {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+button.goal-check-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(3px);
+}
+.goal-check-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 14, 23, 0.7);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+button.goal-check-row.is-completed .goal-check-box {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(79, 227, 219, 0.5);
+}
+button.goal-check-row.is-completed .goal-check-text {
+  color: #fff;
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
 @media (max-width: 1050px) {
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
   .mission-layout { grid-template-columns: 1fr; gap: 36px; }

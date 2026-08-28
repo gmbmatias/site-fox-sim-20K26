@@ -1,12 +1,13 @@
 "use client";
 
-import { CheckCircle2, Clock3, RotateCcw, Trophy, XCircle } from "lucide-react";
+import { CheckCircle2, Clock3, RotateCcw, Trophy, XCircle, Sparkles, AlertTriangle, ArrowRight, Gauge } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ValidLocale } from "@/lib/i18n";
 import { getCourses, CourseCode } from "@/lib/translations/courses";
 import { getQuestions, Question } from "@/lib/translations/questions";
 import { loadProgress, recordActivity } from "@/lib/progress";
+import { soundEngine } from "./GlobalInteractivity";
 
 type QuizMode = "questoes" | "simulado";
 
@@ -197,6 +198,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
           recordActivity({ kind: mode, course, correct, total: pool.length, durationSeconds: 30 * 60, subjects });
           setHistoryCount((count) => count + 1);
           setFinished(true);
+          soundEngine.playSuccess();
           return 0;
         }
         return mode === "simulado" ? current - 1 : current + 1;
@@ -206,6 +208,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
   }, [started, finished, mode, pool, answers, course]);
 
   const start = () => {
+    soundEngine.playChirp();
     const available = allQuestions.filter((question) => question.course === course);
     setPool(mode === "simulado" ? shuffle(available).slice(0, 6) : available);
     setIndex(0);
@@ -231,11 +234,18 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
 
   const confirm = () => {
     if (selected === null || !current) return;
+    const isCorrect = selected === current.correct;
+    if (isCorrect) {
+      soundEngine.playSuccess();
+    } else {
+      soundEngine.playChirp();
+    }
     setAnswers((value) => ({ ...value, [current.id]: selected }));
     setConfirmed(true);
   };
 
   const next = () => {
+    soundEngine.playClick();
     if (index < pool.length - 1) {
       setIndex(index + 1);
       setSelected(null);
@@ -261,6 +271,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
     });
     setHistoryCount((count) => count + 1);
     setFinished(true);
+    soundEngine.playSuccess();
   };
 
   if (!started) {
@@ -278,7 +289,10 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
               type="button"
               key={item.code}
               className={course === item.code ? "course-choice active" : "course-choice"}
-              onClick={() => setCourse(item.code)}
+              onClick={() => {
+                soundEngine.playClick();
+                setCourse(item.code);
+              }}
             >
               <b>{item.shortTitle}</b>
               <span>{item.title}</span>
@@ -289,9 +303,9 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
 
         <div className="quiz-start-footer">
           <span>
-            <Clock3 size={17} /> {mode === "simulado" ? t.timeLimit : t.progressiveTimer}
+            <Clock3 size={17} className="text-cyan" /> {mode === "simulado" ? t.timeLimit : t.progressiveTimer}
           </span>
-          <span>{historyCount} {t.activitiesCompleted}</span>
+          <span className="activities-tag">{historyCount} {t.activitiesCompleted}</span>
           <button type="button" className="button button-primary" onClick={start}>
             {t.startBtn} {mode === "simulado" ? "simulado" : "prática"} <span>→</span>
           </button>
@@ -307,14 +321,21 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
       .replace("{total}", String(pool.length))
       .replace("{time}", timeLabel(mode === "simulado" ? 30 * 60 - seconds : seconds));
 
+    const isPassed = percent >= 70;
+
     return (
       <div className="quiz-result">
         <div className="result-summary panel-card">
           <div className="result-icon">
-            <Trophy size={30} />
+            <Trophy size={32} className="trophy-pulse-icon" />
           </div>
-          <span>{t.finalResult}</span>
-          <h2>{percent}% {t.accuracy}</h2>
+          <span className="section-kicker">{t.finalResult}</span>
+          <div className="result-score-badge-wrap">
+            <h2>{percent}% {t.accuracy}</h2>
+            <span className={`result-status-tag ${isPassed ? "is-passed" : "is-failed"}`}>
+              {isPassed ? "✓ APROVADO NA MATÉRIA" : "REFORÇAR MATÉRIA"}
+            </span>
+          </div>
           <p>{summaryText}</p>
           <div className="result-gauge">
             <i style={{ width: `${percent}%` }} />
@@ -353,11 +374,11 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
   return (
     <div className="quiz-shell panel-card">
       <div className="quiz-toolbar">
-        <span>{course.toUpperCase()} · {current.subject}</span>
+        <span className="quiz-course-tag">{course.toUpperCase()} · {current.subject}</span>
         <div className="quiz-progress">
           <i style={{ width: `${progress}%` }} />
         </div>
-        <b><Clock3 size={16} /> {timeLabel(seconds)}</b>
+        <b className="quiz-timer-badge"><Clock3 size={15} /> {timeLabel(seconds)}</b>
       </div>
 
       <div className="question-count">
@@ -384,13 +405,16 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
               type="button"
               className={classNames}
               disabled={confirmed}
-              onClick={() => setSelected(optionIndex)}
+              onClick={() => {
+                soundEngine.playClick();
+                setSelected(optionIndex);
+              }}
               key={option}
             >
               <span>{String.fromCharCode(65 + optionIndex)}</span>
               <b>{option}</b>
-              {confirmed && isCorrect && <CheckCircle2 size={19} />}
-              {confirmed && isWrong && <XCircle size={19} />}
+              {confirmed && isCorrect && <CheckCircle2 size={19} className="text-green" />}
+              {confirmed && isWrong && <XCircle size={19} className="text-danger" />}
             </button>
           );
         })}
@@ -398,7 +422,7 @@ export function QuizEngine({ mode, locale = "pt-br" }: { mode: QuizMode; locale?
 
       {confirmed && (
         <div className={selected === current.correct ? "answer-explanation success" : "answer-explanation"}>
-          <b>{selected === current.correct ? t.correctAnswer : t.reviewAnswer}</b>
+          <b>{selected === current.correct ? `✓ ${t.correctAnswer}` : `✕ ${t.reviewAnswer}`}</b>
           <p>{current.explanation}</p>
           <small>{t.educationalNote}</small>
         </div>

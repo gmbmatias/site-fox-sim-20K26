@@ -1,9 +1,10 @@
 "use client";
 
-import { Bell, BellRing, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Bell, BellRing, Pause, Play, RotateCcw, Volume2, VolumeX, Sparkles, Flame, Clock, Compass } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ValidLocale } from "@/lib/i18n";
 import { loadProgress, recordPomodoro, setDailyGoal as persistDailyGoal } from "@/lib/progress";
+import { soundEngine } from "./GlobalInteractivity";
 
 type Phase = "foco" | "pausa-curta" | "pausa-longa";
 
@@ -154,6 +155,12 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
   const [subject, setSubject] = useState(t.subjects[0]);
   const completedRef = useRef(false);
 
+  const triggerToast = (message: string, type: "success" | "info" = "info") => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("foxsim-toast", { detail: { message, type } }));
+    }
+  };
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const progress = loadProgress();
@@ -166,24 +173,6 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
     return () => window.clearTimeout(timer);
   }, []);
 
-  const beep = useCallback(() => {
-    if (!sound) return;
-    try {
-      const AudioContextType = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const context = new AudioContextType();
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.frequency.value = 740;
-      gain.gain.setValueAtTime(0.08, context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.7);
-      oscillator.connect(gain).connect(context.destination);
-      oscillator.start();
-      oscillator.stop(context.currentTime + 0.7);
-    } catch {
-      // Audio context fallback
-    }
-  }, [sound]);
-
   useEffect(() => {
     if (!running) return;
     const timer = window.setInterval(() => setRemaining((value) => Math.max(0, value - 1)), 1000);
@@ -195,7 +184,8 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
     const timer = window.setTimeout(() => {
       completedRef.current = true;
       setRunning(false);
-      beep();
+      soundEngine.playSuccess();
+      
       if (notifications && typeof Notification !== "undefined") {
         new Notification("FOX SIM", {
           body: phase === "foco" ? t.notifBodyFocus : t.notifBodyBreak,
@@ -205,12 +195,16 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
         recordPomodoro(focusMinutes, dailyGoal);
         setSessions(loadProgress().pomodoroSessions);
         setTodayMinutes(loadProgress().dailyMinutes);
+        triggerToast(`🎉 Bloco de foco em "${subject}" concluído! (+${focusMinutes} min)`, "success");
+      } else {
+        triggerToast("Pausa concluída! Pronto para o próximo bloco? ✈️", "info");
       }
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [remaining, notifications, phase, focusMinutes, dailyGoal, beep, t]);
+  }, [remaining, notifications, phase, focusMinutes, dailyGoal, t, subject]);
 
   const setPreset = (focus: number, pause: number) => {
+    soundEngine.playClick();
     setFocusMinutes(focus);
     setShortBreak(pause);
     setPhase("foco");
@@ -220,6 +214,7 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
   };
 
   const switchPhase = (next: Phase) => {
+    soundEngine.playClick();
     const minutes = next === "foco" ? focusMinutes : next === "pausa-curta" ? shortBreak : 15;
     setPhase(next);
     setRemaining(minutes * 60);
@@ -227,12 +222,25 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
     completedRef.current = false;
   };
 
-  const reset = () => switchPhase(phase);
+  const reset = () => {
+    soundEngine.playChirp();
+    switchPhase(phase);
+  };
+
+  const toggleRun = () => {
+    soundEngine.playClick();
+    completedRef.current = false;
+    setRunning(!running);
+  };
 
   const requestNotifications = async () => {
     if (typeof Notification === "undefined") return;
     const permission = await Notification.requestPermission();
     setNotifications(permission === "granted");
+    if (permission === "granted") {
+      soundEngine.playSuccess();
+      triggerToast("Notificações do Cockpit Ativadas! 🔔", "success");
+    }
   };
 
   const minutes = Math.floor(remaining / 60).toString().padStart(2, "0");
@@ -302,9 +310,9 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
           <span className="phase-text">{t.phases[phase]}</span>
         </div>
 
-        {/* Circular Instrument Dial */}
+        {/* Circular Instrument Dial with Animated Glow */}
         <div
-          className="clock-dial"
+          className={`clock-dial ${running ? "is-running" : ""}`}
           style={{ "--clock-progress": `${clockProgress}%` } as React.CSSProperties}
         >
           <div className="clock-dial-inner">
@@ -314,6 +322,7 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
               <span className="digit-segment">{seconds}</span>
             </div>
             <div className="clock-subject-pill">
+              <Compass size={12} className="text-cyan" />
               <span>{subject}</span>
             </div>
           </div>
@@ -334,10 +343,7 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
           <button
             type="button"
             className={running ? "main-play-btn is-running" : "main-play-btn"}
-            onClick={() => {
-              completedRef.current = false;
-              setRunning(!running);
-            }}
+            onClick={toggleRun}
           >
             {running ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
             <span>{running ? t.pauseBtn : remaining < totalForPhase ? t.resumeBtn : t.startBtn}</span>
@@ -346,7 +352,10 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
           <button
             type="button"
             className="round-action-btn"
-            onClick={() => setSound(!sound)}
+            onClick={() => {
+              setSound(!sound);
+              soundEngine.playClick();
+            }}
             aria-label={sound ? "Silenciar áudio" : "Ativar áudio"}
             title={sound ? "Silenciar áudio" : "Ativar áudio"}
           >
@@ -393,7 +402,10 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
               <select
                 id="pomodoro-subject-select"
                 value={subject}
-                onChange={(event) => setSubject(event.target.value)}
+                onChange={(event) => {
+                  soundEngine.playClick();
+                  setSubject(event.target.value);
+                }}
               >
                 {t.subjects.map((s) => (
                   <option key={s} value={s}>{s}</option>
