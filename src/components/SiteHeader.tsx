@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { useState } from "react";
 import { ValidLocale, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { soundEngine } from "./GlobalInteractivity";
 
 export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
   const [open, setOpen] = useState(false);
@@ -32,10 +33,22 @@ export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
     { href: `/${locale}/guias`, match: `/${locale}/guias`, label: ui.nav.guides },
   ];
 
+  const handleOpenSearch = () => {
+    soundEngine.playClick();
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("foxsim-open-search"));
+    }
+  };
+
   return (
     <header className="site-header">
       <div className="shell nav-shell">
-        <Link className="brand" href={`/${locale}`} aria-label={`FOX SIM — ${ui.tagline}`}>
+        <Link 
+          className="brand" 
+          href={`/${locale}`} 
+          aria-label={`FOX SIM — ${ui.tagline}`}
+          onClick={() => soundEngine.playChirp()}
+        >
           <span className="brand-mark">F</span>
           <span>FOX SIM</span>
         </Link>
@@ -47,7 +60,10 @@ export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  soundEngine.playClick();
+                  setOpen(false);
+                }}
                 className={isActive ? "active" : ""}
               >
                 {link.label}
@@ -57,16 +73,42 @@ export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
         </nav>
 
         <div className="nav-actions">
+          {/* Quick Search Header Trigger */}
+          <button
+            type="button"
+            className="nav-search-btn"
+            onClick={handleOpenSearch}
+            title="Buscar artigos, termos, guias e simulados (Ctrl + K)"
+            aria-label="Abrir busca"
+          >
+            <Search size={15} />
+            <span className="search-key-badge">⌘K</span>
+          </button>
+
+          <div className="nav-zulu-badge" title="Horário UTC Zulu da Aviação">
+            <span className="live-pulse" />
+            <span>ZULU LIVE</span>
+          </div>
+
           <LanguageSwitcher currentLocale={locale} />
-          <Link className="nav-cta" href={`/${locale}/painel`}>
+          
+          <Link 
+            className="nav-cta" 
+            href={`/${locale}/painel`}
+            onClick={() => soundEngine.playClick()}
+          >
             {ui.nav.openPanel}
           </Link>
+
           <button
             className="menu-button"
             type="button"
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              soundEngine.playClick();
+              setOpen(!open);
+            }}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>

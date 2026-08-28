@@ -7,6 +7,7 @@ import { getCourses } from "@/lib/translations/courses";
 import { getArticles } from "@/lib/translations/articles";
 import { getGlossaryTerms } from "@/lib/translations/glossary";
 import { getGuides } from "@/lib/translations/guides";
+import { FlightDeckHUD } from "@/components/FlightDeckHUD";
 
 export async function generateMetadata({
   params,
@@ -121,12 +122,8 @@ export default async function HomePage({
                 </div>
               </div>
 
-              <div className="deck-telemetry-hud">
-                <span>HDG 045°</span>
-                <span>ALT 4500 FT</span>
-                <span>IAS 120 KT</span>
-                <span>V/S 0 FPM</span>
-              </div>
+              {/* Interactive Cockpit HUD with Artificial Horizon & UTC Clock */}
+              <FlightDeckHUD locale={locale} />
 
               <div className="deck-footer-action">
                 <Link className="button button-primary deck-cta" href={`/${locale}/estudos/${featuredCourse.code}`}>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { AdSense } from "@/components/AdSense";
 import { CookieBanner } from "@/components/CookieBanner";
+import { GlobalInteractivity } from "@/components/GlobalInteractivity";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -142,6 +143,7 @@ export default async function LocaleLayout({
       </head>
       <body>
         <GoogleAnalytics />
+        <GlobalInteractivity locale={locale} />
         <SiteHeader initialLocale={locale} />
         {children}
         <SiteFooter initialLocale={locale} />

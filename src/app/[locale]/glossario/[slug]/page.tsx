@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpen, ExternalLink, Wrench } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { GlossaryInteractiveViewer } from "@/components/GlossaryInteractiveViewer";
 import { LOCALES, ValidLocale, getAlternateLanguages, getBcp47Lang, getSiteUrl, normalizeLocale } from "@/lib/i18n";
 import { getGlossaryTermBySlug, getGlossaryTerms } from "@/lib/translations/glossary";
 import { getArticleBySlug } from "@/lib/translations/articles";
@@ -32,7 +31,7 @@ export async function generateMetadata({
   const alternates = getAlternateLanguages(`/glossario/${term.slug}`);
 
   return {
-    title: `${term.term} — O que é, Significado e Definição`,
+    title: `${term.term} — O que é, Significado e Definição | Glossário FOX SIM`,
     description: term.shortDefinition,
     alternates: {
       canonical: alternates.canonical,
@@ -89,67 +88,17 @@ export default async function GlossaryDetailPage({
         ]}
       />
 
-      <article className="content-section glossary-detail-section">
-        <div className="shell glossary-detail-layout">
-          <div className="glossary-main-column">
-            {/* Quick Answer / Featured Snippet Box */}
-            <div className="featured-snippet-box panel-card">
-              <span className="section-kicker">RESUMO DIRETO</span>
-              <h2>O que é {term.term}?</h2>
-              <p className="snippet-lead">{term.shortDefinition}</p>
-              <small>Significado: {term.phoneticOrAcronym}</small>
-            </div>
-
-            {/* In-depth explanation */}
-            <div className="glossary-depth-content">
-              <h2>Explicação Técnica Completa</h2>
-              {term.fullExplanation.map((par, i) => (
-                <p key={i}>{par}</p>
-              ))}
-            </div>
-
-            {/* Key formula or rules */}
-            {term.keyFormulaOrRules && (
-              <div className="formula-box panel-card">
-                <span className="section-kicker">FÓRMULA / REGRA PRÁTICA</span>
-                <code>{term.keyFormulaOrRules}</code>
-              </div>
-            )}
-
-            {/* Back Button */}
-            <div className="article-back-nav">
-              <Link href={`/${locale}/glossario`} className="button button-secondary">
-                <ArrowLeft size={16} /> {ui.common.allTerms}
-              </Link>
-            </div>
-          </div>
-
-          {/* Related Links Sidebar */}
-          <aside className="glossary-sidebar">
-            {relatedArticle && (
-              <div className="panel-card sidebar-block">
-                <span className="section-kicker">GUIA RELACIONADO</span>
-                <h3>{relatedArticle.title}</h3>
-                <p>{relatedArticle.description}</p>
-                <Link href={`/${locale}/artigos/${relatedArticle.slug}`} className="button button-primary">
-                  <BookOpen size={16} /> Ler guia completo
-                </Link>
-              </div>
-            )}
-
-            {term.relatedTool && (
-              <div className="panel-card sidebar-block">
-                <span className="section-kicker">FERRAMENTA</span>
-                <h3>Calculadora de {term.term}</h3>
-                <p>Calcule os parâmetros na nossa central de ferramentas.</p>
-                <Link href={`/${locale}/ferramentas`} className="button button-secondary">
-                  <Wrench size={16} /> Abrir ferramentas
-                </Link>
-              </div>
-            )}
-          </aside>
+      <section className="content-section glossary-detail-section">
+        <div className="shell">
+          <GlossaryInteractiveViewer
+            term={term}
+            locale={locale}
+            bcp47={bcp47}
+            ui={ui}
+            relatedArticle={relatedArticle}
+          />
         </div>
-      </article>
+      </section>
 
       <script
         type="application/ld+json"
