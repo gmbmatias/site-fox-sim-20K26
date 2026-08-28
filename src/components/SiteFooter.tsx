@@ -34,7 +34,7 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
           <span className="educational-label">{ui.footer.educationalNotice}</span>
         </div>
 
-        <div>
+        <div className="footer-col">
           <b>{ui.footer.colLearn}</b>
           <Link href={`/${locale}/estudos`}>{ui.nav.studies}</Link>
           <Link href={`/${locale}/questoes`}>{ui.nav.questions}</Link>
@@ -44,7 +44,7 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
           <Link href={`/${locale}/guias`}>{ui.nav.guides}</Link>
         </div>
 
-        <div>
+        <div className="footer-col">
           <b>{ui.footer.colTools}</b>
           <Link href={`/${locale}/pomodoro`}>{ui.nav.pomodoro}</Link>
           <Link href={`/${locale}/ferramentas`}>{ui.nav.tools}</Link>
@@ -52,7 +52,7 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
           <Link href={`/${locale}/meu-progresso`}>{ui.breadcrumbs.progress}</Link>
         </div>
 
-        <div>
+        <div className="footer-col">
           <b>{ui.footer.colPlatform}</b>
           <Link href={`/${locale}/sobre`}>{ui.footer.about}</Link>
           <Link href={`/${locale}/contato`}>{ui.footer.contact}</Link>
@@ -60,15 +60,15 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
           <Link href={`/${locale}/termos`}>{ui.footer.terms}</Link>
           <Link href={`/${locale}/cookies`}>{ui.footer.cookies}</Link>
           <button type="button" className="footer-cookie-trigger" onClick={openCookieModal}>
-            <Cookie size={12} /> {ui.footer.manageCookies}
+            <Cookie size={13} /> {ui.footer.manageCookies}
           </button>
           <Link href={`/${locale}/disclaimer`}>{ui.footer.disclaimer}</Link>
         </div>
       </div>
 
       <div className="shell footer-bottom">
-        <span>{ui.footer.copyright}</span>
-        <span>{ui.footer.motto}</span>
+        <span className="footer-copyright-text">{ui.footer.copyright}</span>
+        <span className="footer-motto-text">{ui.footer.motto}</span>
       </div>
     </footer>
   );
