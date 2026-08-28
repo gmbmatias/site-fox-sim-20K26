@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { GlossaryDirectory } from "@/components/GlossaryDirectory";
 import { PageHero } from "@/components/PageHero";
 import { ValidLocale, getAlternateLanguages, normalizeLocale } from "@/lib/i18n";
 import { getGlossaryTerms } from "@/lib/translations/glossary";
@@ -91,27 +91,7 @@ export default async function GlossaryPage({
 
       <section className="content-section">
         <div className="shell">
-          <div className="glossary-grid">
-            {terms.map((term) => (
-              <article key={term.slug} className="glossary-card panel-card">
-                <header className="glossary-card-header">
-                  <div>
-                    <span className="glossary-badge">{term.category}</span>
-                    <h2>
-                      <Link href={`/${locale}/glossario/${term.slug}`}>{term.term}</Link>
-                    </h2>
-                  </div>
-                  <small>{term.phoneticOrAcronym}</small>
-                </header>
-                <p>{term.shortDefinition}</p>
-                <div className="glossary-card-footer">
-                  <Link href={`/${locale}/glossario/${term.slug}`} className="glossary-read-link">
-                    Ver explicação detalhada <span>→</span>
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
+          <GlossaryDirectory locale={locale} terms={terms} />
         </div>
       </section>
     </main>

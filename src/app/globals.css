@@ -840,8 +840,232 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ==========================================================================
-   GLOSSARY CHIPS GRID (3 COLUMNS)
+   GLOSSARY DIRECTORY & CARDS (/glossario)
    ========================================================================== */
+.glossary-directory-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.glossary-controls-panel {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: linear-gradient(155deg, rgba(14, 34, 50, 0.9), rgba(7, 18, 28, 0.95));
+}
+.glossary-search-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.glossary-search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--cyan);
+  pointer-events: none;
+}
+.glossary-search-input-box input {
+  width: 100%;
+  padding: 13px 44px 13px 46px;
+  border-radius: 10px;
+  background: rgba(5, 12, 19, 0.85);
+  border: 1px solid var(--line-strong);
+  color: #eef6f8;
+  font-size: 14px;
+  font-weight: 550;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.glossary-search-input-box input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(79, 227, 219, 0.15);
+}
+.glossary-search-input-box input::placeholder {
+  color: #657e8c;
+}
+.glossary-clear-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: 0;
+  color: #728c98;
+  cursor: pointer;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+.glossary-clear-btn:hover { color: #fff; }
+
+.glossary-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.category-pill-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 12px;
+  font-weight: 650;
+  color: #8fa4b0;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.category-pill-btn:hover {
+  border-color: var(--line-strong);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+.category-pill-btn.active {
+  border-color: var(--cyan);
+  background: rgba(79, 227, 219, 0.14);
+  color: var(--cyan);
+  font-weight: 750;
+}
+
+.glossary-stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+}
+.glossary-count-tag {
+  color: #6e8794;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+}
+.glossary-reset-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--cyan);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 3-Column Glossary Cards Grid */
+.glossary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.glossary-card {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+.glossary-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+  background: linear-gradient(155deg, rgba(16, 38, 54, 0.95), rgba(8, 20, 31, 0.98));
+}
+.glossary-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.glossary-card-top-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.glossary-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(79, 227, 219, 0.1);
+  border: 1px solid rgba(79, 227, 219, 0.2);
+}
+.glossary-acronym-tag {
+  font-size: 10px;
+  font-family: ui-monospace, monospace;
+  color: #6d8896;
+}
+.glossary-card-term {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: #f1f8fa;
+}
+.glossary-card-term a {
+  transition: color 0.15s;
+}
+.glossary-card-term a:hover {
+  color: var(--cyan);
+}
+.glossary-card-def {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.62;
+  color: var(--muted);
+  flex: 1;
+}
+.glossary-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.glossary-read-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--cyan);
+  transition: gap 0.2s;
+}
+.glossary-card:hover .glossary-read-link {
+  gap: 9px;
+}
+
+.glossary-empty-box {
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.empty-icon-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(79, 227, 219, 0.1);
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+.glossary-empty-box h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #eef6f8;
+}
+.glossary-empty-box p {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Homepage Chips Grid */
 .glossary-chips-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -896,85 +1120,207 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ==========================================================================
-   ARTICLE CARDS & GRID
+   ARTICLES DIRECTORY & CARDS (/artigos)
    ========================================================================== */
+.articles-directory-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.articles-controls-panel {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: linear-gradient(155deg, rgba(14, 34, 50, 0.9), rgba(7, 18, 28, 0.95));
+}
+.articles-search-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.articles-search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--cyan);
+  pointer-events: none;
+}
+.articles-search-input-box input {
+  width: 100%;
+  padding: 13px 44px 13px 46px;
+  border-radius: 10px;
+  background: rgba(5, 12, 19, 0.85);
+  border: 1px solid var(--line-strong);
+  color: #eef6f8;
+  font-size: 14px;
+  font-weight: 550;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.articles-search-input-box input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(79, 227, 219, 0.15);
+}
+.articles-search-input-box input::placeholder {
+  color: #657e8c;
+}
+.articles-clear-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: 0;
+  color: #728c98;
+  cursor: pointer;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+.articles-clear-btn:hover { color: #fff; }
+
+.articles-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.articles-stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+}
+.articles-count-tag {
+  color: #6e8794;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+}
+.articles-reset-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--cyan);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 3-Column Articles Grid */
+.articles-cards-grid,
 .article-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 20px;
 }
 .article-card {
-  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(12, 28, 41, 0.65);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .article-card:hover {
   transform: translateY(-4px);
-  border-color: var(--line-strong);
+  border-color: var(--cyan);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
 }
+.article-visual-band,
 .article-visual {
-  height: 100px;
-  padding: 14px 18px;
+  height: 80px;
+  padding: 12px 18px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, #0e2433 0%, #07131d 100%);
+  background: linear-gradient(135deg, rgba(20, 50, 72, 0.8) 0%, rgba(8, 22, 34, 0.9) 100%);
   border-bottom: 1px solid var(--line);
   position: relative;
 }
+.article-number-badge,
 .article-visual span {
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 850;
   color: var(--cyan);
-  letter-spacing: 0.08em;
+  font-family: ui-monospace, monospace;
 }
+.article-brand-kicker,
 .article-visual b {
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 850;
   letter-spacing: 0.16em;
-  color: #5d7885;
+  color: #698796;
 }
 .article-card-body {
-  padding: 20px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+.article-category-badge,
 .article-card-body > span {
-  font-size: 8.5px;
+  display: inline-block;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--cyan);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
+.article-card-title,
 .article-card-body h2 {
-  margin: 0 0 8px;
-  font-size: 17px;
+  margin: 0 0 10px;
+  font-size: 17.5px;
   line-height: 1.35;
   color: #eef6f8;
+  letter-spacing: -0.02em;
 }
+.article-card-excerpt,
 .article-card-body p {
-  margin: 0 0 18px;
-  font-size: 12.5px;
+  margin: 0 0 20px;
+  font-size: 13px;
   line-height: 1.6;
   color: var(--muted);
+  flex: 1;
 }
+.article-card-footer,
 .article-card-body footer {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 14px;
   border-top: 1px solid var(--line);
   color: #728b97;
-  font-size: 11px;
+  font-size: 11.5px;
 }
-.article-card:hover footer { color: var(--cyan); }
+.article-read-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.article-arrow-icon {
+  color: var(--cyan);
+  transition: transform 0.2s;
+}
+.article-card:hover .article-arrow-icon {
+  transform: translate(2px, -2px);
+}
+.article-card:hover .article-card-footer {
+  color: #cfdde3;
+}
+
+.articles-empty-box {
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 /* ==========================================================================
    FINAL CALL TO ACTION (CTA CARD BANNER)
@@ -2868,7 +3214,7 @@ img { max-width: 100%; height: auto; }
   .main-nav a::after { display: none; }
   .nav-cta { display: none; }
   .menu-button { display: flex; }
-  .feature-grid, .article-grid, .course-grid-2x2, .guides-grid, .glossary-chips-grid, .tool-grid, .dashboard-courses-grid {
+  .feature-grid, .article-grid, .articles-cards-grid, .glossary-cards-grid, .course-grid-2x2, .guides-grid, .glossary-chips-grid, .tool-grid, .dashboard-courses-grid {
     grid-template-columns: 1fr;
   }
   .course-selector { grid-template-columns: 1fr 1fr; }
