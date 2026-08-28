@@ -371,13 +371,17 @@ export default async function HomePage({
       {/* Final Call to Action */}
       <section className="cta-section">
         <div className="shell">
-          <div className="cta-box">
-            <span className="section-kicker">{ui.home.ctaKicker}</span>
-            <h2>{ui.home.ctaTitle}</h2>
-            <p>{ui.home.ctaDesc}</p>
-            <Link className="button button-primary" href={`/${locale}/estudos`}>
-              {ui.home.chooseTrack} <span>→</span>
-            </Link>
+          <div className="cta-card panel-card">
+            <div className="cta-content">
+              <span className="section-kicker">{ui.home.ctaKicker}</span>
+              <h2>{ui.home.ctaTitle}</h2>
+              <p>{ui.home.ctaDesc}</p>
+            </div>
+            <div className="cta-actions">
+              <Link className="button button-primary" href={`/${locale}/estudos`}>
+                {ui.home.chooseTrack} <span>→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

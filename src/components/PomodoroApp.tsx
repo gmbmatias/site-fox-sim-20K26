@@ -34,7 +34,7 @@ const STRINGS: Record<ValidLocale, {
   notifBodyBreak: string;
 }> = {
   "pt-br": {
-    phases: { foco: "Sessão de foco", "pausa-curta": "Pausa curta", "pausa-longa": "Pausa longa" },
+    phases: { foco: "Sessão de Foco", "pausa-curta": "Pausa Curta", "pausa-longa": "Pausa Longa" },
     custom: "Personalizado",
     focusLabel: "Foco",
     breakLabel: "Pausa",
@@ -42,22 +42,22 @@ const STRINGS: Record<ValidLocale, {
     resumeBtn: "Continuar",
     startBtn: "Iniciar",
     focusBtn: "Foco",
-    shortBreakBtn: "Pausa curta",
-    longBreakBtn: "Pausa longa",
+    shortBreakBtn: "Pausa Curta",
+    longBreakBtn: "Pausa Longa",
     sessionKicker: "SESSÃO ATUAL",
-    subjectLabel: "Matéria",
+    subjectLabel: "Matéria de Estudo",
     subjects: ["Teoria de voo", "Meteorologia", "Navegação", "Regulamentos", "Performance", "Voo IFR", "Multimotor"],
     notifEnabled: "Notificações ativadas",
     notifEnableBtn: "Ativar notificações",
-    todayKicker: "HOJE",
+    todayKicker: "DESEMPENHO DE HOJE",
     minStudied: "min estudados",
     sessionsCount: "sessões",
-    ofGoal: "da meta",
+    ofGoal: "da meta diária",
     dailyGoalLabel: "Meta diária",
-    tipTitle: "Ritmo sustentável",
-    tipText: "Durante o foco, elimine distrações e defina uma meta pontual. Na pausa, levante-se e descanse a visão.",
-    notifBodyFocus: "Sessão concluída. Hora de respirar.",
-    notifBodyBreak: "Pausa concluída. Pronto para continuar?",
+    tipTitle: "Ritmo Sustentável de Estudo",
+    tipText: "Durante o bloco de foco, elimine distrações e foque em um único objetivo. Na pausa, descanse a visão para melhor fixação da memória.",
+    notifBodyFocus: "Sessão de foco concluída! Hora de uma pausa.",
+    notifBodyBreak: "Pausa concluída! Pronto para a próxima sessão?",
   },
   en: {
     phases: { foco: "Focus Session", "pausa-curta": "Short Break", "pausa-longa": "Long Break" },
@@ -68,25 +68,25 @@ const STRINGS: Record<ValidLocale, {
     resumeBtn: "Resume",
     startBtn: "Start",
     focusBtn: "Focus",
-    shortBreakBtn: "Short break",
-    longBreakBtn: "Long break",
+    shortBreakBtn: "Short Break",
+    longBreakBtn: "Long Break",
     sessionKicker: "CURRENT SESSION",
-    subjectLabel: "Subject",
+    subjectLabel: "Study Subject",
     subjects: ["Principles of Flight", "Meteorology", "Navigation", "Air Law & Regs", "Performance", "IFR Flight", "Multi-Engine"],
     notifEnabled: "Notifications enabled",
     notifEnableBtn: "Enable notifications",
-    todayKicker: "TODAY",
+    todayKicker: "TODAY'S PROGRESS",
     minStudied: "minutes studied",
     sessionsCount: "sessions",
-    ofGoal: "of goal",
+    ofGoal: "of daily goal",
     dailyGoalLabel: "Daily target",
-    tipTitle: "Sustainable Focus",
-    tipText: "During focus intervals, eliminate tab switching and focus on one concept. Take active short breaks to consolidate memory.",
-    notifBodyFocus: "Focus session complete. Time for a short break.",
-    notifBodyBreak: "Break finished. Ready for the next flight block?",
+    tipTitle: "Sustainable Study Rhythm",
+    tipText: "During focus intervals, eliminate distractions and focus on one specific concept. Take active short breaks to consolidate knowledge.",
+    notifBodyFocus: "Focus session complete! Time for a short break.",
+    notifBodyBreak: "Break finished! Ready for your next flight block?",
   },
   es: {
-    phases: { foco: "Sesión de foco", "pausa-curta": "Pausa corta", "pausa-longa": "Pausa larga" },
+    phases: { foco: "Sesión de Foco", "pausa-curta": "Pausa Corta", "pausa-longa": "Pausa Larga" },
     custom: "Personalizado",
     focusLabel: "Foco",
     breakLabel: "Pausa",
@@ -94,25 +94,25 @@ const STRINGS: Record<ValidLocale, {
     resumeBtn: "Continuar",
     startBtn: "Iniciar",
     focusBtn: "Foco",
-    shortBreakBtn: "Pausa corta",
-    longBreakBtn: "Pausa larga",
+    shortBreakBtn: "Pausa Corta",
+    longBreakBtn: "Pausa Larga",
     sessionKicker: "SESIÓN ACTUAL",
-    subjectLabel: "Materia",
-    subjects: ["Principios de vuelo", "Meteorología", "Navegación", "Reglamentación", "Rendimiento", "Vuelo IFR", "Multimotor"],
+    subjectLabel: "Materia de Estudio",
+    subjects: ["Teoría de vuelo", "Meteorología", "Navegación", "Reglamentos", "Performance", "Vuelo IFR", "Multimotor"],
     notifEnabled: "Notificaciones activadas",
     notifEnableBtn: "Activar notificaciones",
-    todayKicker: "HOY",
+    todayKicker: "PROGRESO DE HOY",
     minStudied: "min estudiados",
     sessionsCount: "sesiones",
-    ofGoal: "de la meta",
+    ofGoal: "de la meta diaria",
     dailyGoalLabel: "Meta diaria",
-    tipTitle: "Ritmo sostenible",
-    tipText: "Durante el foco, cierra distracciones y define un objetivo claro. En la pausa, levántate y descansa la vista.",
-    notifBodyFocus: "Sesión completada. Momento de tomar una pausa.",
-    notifBodyBreak: "Pausa terminada. ¿Listo para continuar?",
+    tipTitle: "Ritmo Sostenible de Estudio",
+    tipText: "Durante el bloque de foco, elimina distracciones y enfócate en un solo objetivo. Descansa la vista en las pausas.",
+    notifBodyFocus: "¡Sesión de foco completada! Momento de descansar.",
+    notifBodyBreak: "¡Pausa finalizada! ¿Listo para continuar?",
   },
   fr: {
-    phases: { foco: "Session de focus", "pausa-curta": "Pause courte", "pausa-longa": "Pause longue" },
+    phases: { foco: "Session de Focus", "pausa-curta": "Pause Courte", "pausa-longa": "Pause Longue" },
     custom: "Personnalisé",
     focusLabel: "Focus",
     breakLabel: "Pause",
@@ -120,30 +120,30 @@ const STRINGS: Record<ValidLocale, {
     resumeBtn: "Reprendre",
     startBtn: "Démarrer",
     focusBtn: "Focus",
-    shortBreakBtn: "Pause courte",
-    longBreakBtn: "Pause longue",
-    sessionKicker: "SESSION EN COURS",
-    subjectLabel: "Matière",
-    subjects: ["Principes du vol", "Météorologie", "Navigation", "Réglementation", "Performances", "Vol IFR", "Multi-moteurs"],
+    shortBreakBtn: "Pause Courte",
+    longBreakBtn: "Pause Longue",
+    sessionKicker: "SESSION ACTUELLE",
+    subjectLabel: "Matière d'Étude",
+    subjects: ["Principes du Vol", "Météorologie", "Navigation", "Réglementation", "Performance", "Vol IFR", "Multi-moteurs"],
     notifEnabled: "Notifications activées",
     notifEnableBtn: "Activer les notifications",
-    todayKicker: "AUJOURD'HUI",
+    todayKicker: "PROGRESSION DU JOUR",
     minStudied: "min étudiées",
     sessionsCount: "sessions",
-    ofGoal: "de l'objectif",
+    ofGoal: "de l'objectif quotidien",
     dailyGoalLabel: "Objectif quotidien",
-    tipTitle: "Rythme soutenu",
-    tipText: "Durant la session, isolez-vous des distractions. Lors de la pause, levez-vous et reposez vos yeux.",
-    notifBodyFocus: "Session terminée. Prenez une pause méritée.",
-    notifBodyBreak: "Pause achevée. Prêt pour le décollage ?",
+    tipTitle: "Rythme d'Étude Soutenable",
+    tipText: "Pendant la session de focus, éliminez les distractions et fixez-vous un objectif précis. Reposez vos yeux pendant les pauses.",
+    notifBodyFocus: "Session terminée ! C'est l'heure d'une pause.",
+    notifBodyBreak: "Pause terminée ! Prêt pour la prochaine session ?",
   },
 };
 
 export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
   const t = STRINGS[locale] || STRINGS["pt-br"];
+  const [phase, setPhase] = useState<Phase>("foco");
   const [focusMinutes, setFocusMinutes] = useState(25);
   const [shortBreak, setShortBreak] = useState(5);
-  const [phase, setPhase] = useState<Phase>("foco");
   const [remaining, setRemaining] = useState(25 * 60);
   const [running, setRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
@@ -180,7 +180,7 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
       oscillator.start();
       oscillator.stop(context.currentTime + 0.7);
     } catch {
-      // Ignorar erros de áudio se bloqueado pelo navegador
+      // Audio context fallback
     }
   }, [sound]);
 
@@ -242,132 +242,228 @@ export function PomodoroApp({ locale = "pt-br" }: { locale?: ValidLocale }) {
 
   return (
     <div className="pomodoro-layout">
+      {/* Clock Instrument Section */}
       <section className="pomodoro-clock panel-card">
+        {/* Preset Selector */}
         <div className="preset-tabs">
-          <button className={focusMinutes === 25 && shortBreak === 5 ? "active" : ""} onClick={() => setPreset(25, 5)}>25 / 5</button>
-          <button className={focusMinutes === 50 && shortBreak === 10 ? "active" : ""} onClick={() => setPreset(50, 10)}>50 / 10</button>
-          <button className={![25, 50].includes(focusMinutes) ? "active" : ""} onClick={() => setPreset(40, 8)}>{t.custom}</button>
+          <button
+            type="button"
+            className={focusMinutes === 25 && shortBreak === 5 ? "preset-tab active" : "preset-tab"}
+            onClick={() => setPreset(25, 5)}
+          >
+            25 / 5 min
+          </button>
+          <button
+            type="button"
+            className={focusMinutes === 50 && shortBreak === 10 ? "preset-tab active" : "preset-tab"}
+            onClick={() => setPreset(50, 10)}
+          >
+            50 / 10 min
+          </button>
+          <button
+            type="button"
+            className={![25, 50].includes(focusMinutes) ? "preset-tab active" : "preset-tab"}
+            onClick={() => setPreset(40, 8)}
+          >
+            {t.custom}
+          </button>
         </div>
 
         {![25, 50].includes(focusMinutes) && (
           <div className="custom-times">
-            <label>
-              {t.focusLabel}{" "}
+            <label className="custom-input-label">
+              <span>{t.focusLabel}</span>
               <input
                 type="number"
                 min="1"
                 max="120"
                 value={focusMinutes}
                 onChange={(event) => setPreset(Math.max(1, Number(event.target.value)), shortBreak)}
-              />{" "}
-              min
+              />
+              <small>min</small>
             </label>
-            <label>
-              {t.breakLabel}{" "}
+            <label className="custom-input-label">
+              <span>{t.breakLabel}</span>
               <input
                 type="number"
                 min="1"
                 max="30"
                 value={shortBreak}
                 onChange={(event) => setPreset(focusMinutes, Math.max(1, Number(event.target.value)))}
-              />{" "}
-              min
+              />
+              <small>min</small>
             </label>
           </div>
         )}
 
-        <span className="clock-phase"><i />{t.phases[phase]}</span>
+        {/* Phase Header Tag */}
+        <div className="clock-phase-tag">
+          <span className="phase-dot" />
+          <span className="phase-text">{t.phases[phase]}</span>
+        </div>
 
-        <div className="clock-face" style={{ "--clock-progress": `${clockProgress}%` } as React.CSSProperties}>
-          <div>
-            <strong>{minutes}</strong><i>:</i><strong>{seconds}</strong>
-            <small>{subject}</small>
+        {/* Circular Instrument Dial */}
+        <div
+          className="clock-dial"
+          style={{ "--clock-progress": `${clockProgress}%` } as React.CSSProperties}
+        >
+          <div className="clock-dial-inner">
+            <div className="clock-digits-display">
+              <span className="digit-segment">{minutes}</span>
+              <span className="digit-colon">:</span>
+              <span className="digit-segment">{seconds}</span>
+            </div>
+            <div className="clock-subject-pill">
+              <span>{subject}</span>
+            </div>
           </div>
         </div>
 
+        {/* Action Controls */}
         <div className="clock-controls">
-          <button type="button" className="round-control" onClick={reset} aria-label="Resetar">
-            <RotateCcw size={20} />
-          </button>
           <button
             type="button"
-            className="play-control"
+            className="round-action-btn"
+            onClick={reset}
+            aria-label="Reiniciar cronômetro"
+            title="Reiniciar"
+          >
+            <RotateCcw size={18} />
+          </button>
+          
+          <button
+            type="button"
+            className={running ? "main-play-btn is-running" : "main-play-btn"}
             onClick={() => {
               completedRef.current = false;
               setRunning(!running);
             }}
           >
-            {running ? <Pause size={26} fill="currentColor" /> : <Play size={26} fill="currentColor" />}
-            {running ? t.pauseBtn : remaining < totalForPhase ? t.resumeBtn : t.startBtn}
+            {running ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
+            <span>{running ? t.pauseBtn : remaining < totalForPhase ? t.resumeBtn : t.startBtn}</span>
+          </button>
+
+          <button
+            type="button"
+            className="round-action-btn"
+            onClick={() => setSound(!sound)}
+            aria-label={sound ? "Silenciar áudio" : "Ativar áudio"}
+            title={sound ? "Silenciar áudio" : "Ativar áudio"}
+          >
+            {sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
+        </div>
+
+        {/* Phase Quick Switch */}
+        <div className="break-switch">
+          <button
+            type="button"
+            className={phase === "foco" ? "phase-btn active" : "phase-btn"}
+            onClick={() => switchPhase("foco")}
+          >
+            {t.focusBtn}
           </button>
           <button
             type="button"
-            className="round-control"
-            onClick={() => setSound(!sound)}
-            aria-label={sound ? "Desativar som" : "Ativar som"}
+            className={phase === "pausa-curta" ? "phase-btn active" : "phase-btn"}
+            onClick={() => switchPhase("pausa-curta")}
           >
-            {sound ? <Volume2 size={20} /> : <VolumeX size={20} />}
+            {t.shortBreakBtn}
           </button>
-        </div>
-
-        <div className="break-switch">
-          <button className={phase === "foco" ? "active" : ""} onClick={() => switchPhase("foco")}>{t.focusBtn}</button>
-          <button className={phase === "pausa-curta" ? "active" : ""} onClick={() => switchPhase("pausa-curta")}>{t.shortBreakBtn}</button>
-          <button className={phase === "pausa-longa" ? "active" : ""} onClick={() => switchPhase("pausa-longa")}>{t.longBreakBtn}</button>
+          <button
+            type="button"
+            className={phase === "pausa-longa" ? "phase-btn active" : "phase-btn"}
+            onClick={() => switchPhase("pausa-longa")}
+          >
+            {t.longBreakBtn}
+          </button>
         </div>
       </section>
 
-      <aside className="pomodoro-settings">
+      {/* Sidebar Cockpit Settings & Statistics */}
+      <aside className="pomodoro-sidebar">
+        {/* Subject & Notification Form */}
         <div className="panel-card setting-card">
           <span className="section-kicker">{t.sessionKicker}</span>
-          <label>
-            {t.subjectLabel}
-            <select value={subject} onChange={(event) => setSubject(event.target.value)}>
-              {t.subjects.map((s) => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
-          </label>
+          <div className="setting-field">
+            <label htmlFor="pomodoro-subject-select" className="setting-label">
+              {t.subjectLabel}
+            </label>
+            <div className="select-wrap">
+              <select
+                id="pomodoro-subject-select"
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+              >
+                {t.subjects.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           <button
-            className={notifications ? "notification-button active" : "notification-button"}
+            type="button"
+            className={notifications ? "notification-toggle-btn active" : "notification-toggle-btn"}
             onClick={requestNotifications}
           >
-            {notifications ? <BellRing size={18} /> : <Bell size={18} />} {notifications ? t.notifEnabled : t.notifEnableBtn}
+            {notifications ? <BellRing size={16} /> : <Bell size={16} />}
+            <span>{notifications ? t.notifEnabled : t.notifEnableBtn}</span>
           </button>
         </div>
 
+        {/* Today's Goal & Metrics */}
         <div className="panel-card today-card">
           <span className="section-kicker">{t.todayKicker}</span>
-          <div>
-            <strong>{todayMinutes}</strong>
-            <span>{t.minStudied}</span>
+          
+          <div className="today-main-metric">
+            <strong className="metric-number">{todayMinutes}</strong>
+            <span className="metric-unit">{t.minStudied}</span>
           </div>
-          <div className="today-stats">
-            <span><b>{sessions}</b> {t.sessionsCount}</span>
-            <span><b>{Math.min(100, Math.round((todayMinutes / (dailyGoal || 1)) * 100))}%</b> {t.ofGoal}</span>
+
+          <div className="today-stats-grid">
+            <div className="stat-pill-box">
+              <strong>{sessions}</strong>
+              <span>{t.sessionsCount}</span>
+            </div>
+            <div className="stat-pill-box">
+              <strong>{Math.min(100, Math.round((todayMinutes / (dailyGoal || 1)) * 100))}%</strong>
+              <span>{t.ofGoal}</span>
+            </div>
           </div>
-          <div className="goal-bar">
-            <i style={{ width: `${Math.min(100, (todayMinutes / (dailyGoal || 1)) * 100)}%` }} />
+
+          <div className="goal-progress-wrap">
+            <div className="goal-progress-bar">
+              <i style={{ width: `${Math.min(100, (todayMinutes / (dailyGoal || 1)) * 100)}%` }} />
+            </div>
           </div>
-          <label>
-            {t.dailyGoalLabel}{" "}
-            <input
-              type="number"
-              min="10"
-              max="480"
-              value={dailyGoal}
-              onChange={(event) => {
-                const goal = Math.max(10, Number(event.target.value));
-                setDailyGoal(goal);
-                persistDailyGoal(goal);
-              }}
-            />{" "}
-            min
-          </label>
+
+          <div className="daily-goal-setter">
+            <label htmlFor="pomodoro-daily-goal-input" className="goal-input-label">
+              <span>{t.dailyGoalLabel}</span>
+              <div className="goal-input-group">
+                <input
+                  id="pomodoro-daily-goal-input"
+                  type="number"
+                  min="10"
+                  max="480"
+                  value={dailyGoal}
+                  onChange={(event) => {
+                    const goal = Math.max(10, Number(event.target.value));
+                    setDailyGoal(goal);
+                    persistDailyGoal(goal);
+                  }}
+                />
+                <span className="goal-unit-tag">min</span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div className="panel-card pomodoro-tip">
-          <b>{t.tipTitle}</b>
+        {/* Sustainable Focus Tip Card */}
+        <div className="panel-card pomodoro-tip-box">
+          <span className="tip-kicker">DICA TÉCNICA</span>
+          <h4>{t.tipTitle}</h4>
           <p>{t.tipText}</p>
         </div>
       </aside>
