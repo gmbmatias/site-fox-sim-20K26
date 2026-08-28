@@ -67,7 +67,7 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
       </div>
 
       <div className="shell footer-bottom">
-        <span>© {new Date().getFullYear()} FOX SIM. {ui.footer.copyright}</span>
+        <span>{ui.footer.copyright}</span>
         <span>{ui.footer.motto}</span>
       </div>
     </footer>

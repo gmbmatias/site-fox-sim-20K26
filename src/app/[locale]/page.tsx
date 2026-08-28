@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, CheckCircle2, ChevronRight, Compass, Flame, Layers, Sparkles, Timer, Wrench, Shield, Award } from "lucide-react";
-import { ValidLocale, getAlternateLanguages, getBcp47Lang, getSiteUrl, normalizeLocale } from "@/lib/i18n";
+import { ValidLocale, createPageMetadata, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
 import { getCourses } from "@/lib/translations/courses";
 import { getArticles } from "@/lib/translations/articles";
@@ -16,21 +16,13 @@ export async function generateMetadata({
   const resolvedParams = await params;
   const locale = normalizeLocale(resolvedParams.locale);
   const ui = getUi(locale);
-  const alternates = getAlternateLanguages("/");
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: "/",
     title: `${ui.siteName} — ${ui.tagline}`,
     description: ui.description,
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
-    openGraph: {
-      title: `${ui.siteName} — ${ui.tagline}`,
-      description: ui.description,
-      url: `${getSiteUrl()}/${locale}`,
-    },
-  };
+  });
 }
 
 export default async function HomePage({
@@ -46,12 +38,23 @@ export default async function HomePage({
   const glossaryTerms = getGlossaryTerms(locale).slice(0, 6);
   const guides = getGuides(locale);
 
+  const featuredCourse = courses[0] || {
+    code: "pp",
+    title: "Piloto Privado",
+    description: "A base indispensável para compreender aerodinâmica, meteorologia, navegação e operação segura.",
+    estimatedHours: 32,
+    modules: [],
+  };
+
+  const featuredLessonsCount = featuredCourse.modules.flatMap((m) => m.lessons).length || 9;
+
   return (
     <main>
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-sky-grid" aria-hidden="true" />
-        <div className="shell hero-layout">
+        <div className="hero-radar-bg" aria-hidden="true" />
+        <div className="shell hero-grid">
+          {/* Left Column: Copy & Actions */}
           <div className="hero-copy">
             <div className="hero-kicker">
               <span className="kicker-dot" />
@@ -61,6 +64,7 @@ export default async function HomePage({
               {ui.home.heroTitle1} <em>{ui.home.heroTitleEm}</em>
             </h1>
             <p className="hero-desc">{ui.home.heroDesc}</p>
+            
             <div className="hero-actions">
               <Link className="button button-primary" href={`/${locale}/estudos`}>
                 {ui.home.startStudying} <span>→</span>
@@ -69,52 +73,65 @@ export default async function HomePage({
                 {ui.home.startSimulation}
               </Link>
             </div>
+            
             <div className="hero-proof">
-              <div>
+              <div className="proof-item">
                 <strong>04</strong>
                 <span>{ui.home.proofTracks}</span>
               </div>
-              <div>
+              <div className="proof-item">
                 <strong>24+</strong>
                 <span>{ui.home.proofQuestions}</span>
               </div>
-              <div>
+              <div className="proof-item">
                 <strong>10</strong>
                 <span>{ui.home.proofTools}</span>
               </div>
             </div>
           </div>
 
-          <div className="hero-visual" aria-hidden="true">
-            <div className="flight-deck-card">
+          {/* Right Column: Featured Flight Deck Panel */}
+          <div className="hero-visual">
+            <div className="flight-deck-panel panel-card">
               <div className="deck-header">
-                <span>{ui.home.flightDeck}</span>
-                <span className="deck-live"><i /> ONLINE</span>
+                <span className="deck-tag">{ui.home.flightDeck}</span>
+                <span className="deck-status-live">
+                  <span className="live-pulse" /> ONLINE
+                </span>
               </div>
-              <div className="deck-main">
-                <small>{ui.home.featuredTrack}</small>
-                <strong>{courses[0]?.title || "Piloto Privado"}</strong>
-                <p>{courses[0]?.description}</p>
+
+              <div className="deck-featured-body">
+                <span className="deck-eyebrow">{ui.home.featuredTrack}</span>
+                <h3 className="deck-title">{featuredCourse.title}</h3>
+                <p className="deck-desc">{featuredCourse.description}</p>
               </div>
-              <div className="deck-stats">
-                <div>
-                  <small>STATUS</small>
-                  <b>ICAO / ANAC</b>
+
+              <div className="deck-stats-grid">
+                <div className="deck-stat-col">
+                  <span className="stat-label">STATUS</span>
+                  <strong className="stat-value">ICAO / ANAC</strong>
                 </div>
-                <div>
-                  <small>CARGA</small>
-                  <b>{courses[0]?.estimatedHours} {ui.common.hours}</b>
+                <div className="deck-stat-col">
+                  <span className="stat-label">CARGA</span>
+                  <strong className="stat-value">{featuredCourse.estimatedHours} {ui.common.hours}</strong>
                 </div>
-                <div>
-                  <small>AULAS</small>
-                  <b>{courses[0]?.modules.flatMap(m => m.lessons).length} {ui.home.lessonsCount}</b>
+                <div className="deck-stat-col">
+                  <span className="stat-label">AULAS</span>
+                  <strong className="stat-value">{featuredLessonsCount} {ui.home.lessonsCount}</strong>
                 </div>
               </div>
-              <div className="deck-hud">
+
+              <div className="deck-telemetry-hud">
                 <span>HDG 045°</span>
                 <span>ALT 4500 FT</span>
                 <span>IAS 120 KT</span>
                 <span>V/S 0 FPM</span>
+              </div>
+
+              <div className="deck-footer-action">
+                <Link className="button button-primary deck-cta" href={`/${locale}/estudos/${featuredCourse.code}`}>
+                  {ui.common.continueStudying} <span>→</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -131,29 +148,35 @@ export default async function HomePage({
           </div>
 
           <div className="feature-grid">
-            <article className="feature-card">
-              <span className="feature-icon"><Layers size={22} /></span>
+            <article className="feature-card panel-card">
+              <div className="feature-icon-box">
+                <Layers size={22} />
+              </div>
               <h3>{ui.home.feature1Title}</h3>
               <p>{ui.home.feature1Text}</p>
-              <Link href={`/${locale}/estudos`}>
+              <Link href={`/${locale}/estudos`} className="feature-link">
                 {ui.home.explore} <span>→</span>
               </Link>
             </article>
 
-            <article className="feature-card">
-              <span className="feature-icon"><CheckCircle2 size={22} /></span>
+            <article className="feature-card panel-card">
+              <div className="feature-icon-box">
+                <CheckCircle2 size={22} />
+              </div>
               <h3>{ui.home.feature2Title}</h3>
               <p>{ui.home.feature2Text}</p>
-              <Link href={`/${locale}/questoes`}>
+              <Link href={`/${locale}/questoes`} className="feature-link">
                 {ui.home.explore} <span>→</span>
               </Link>
             </article>
 
-            <article className="feature-card">
-              <span className="feature-icon"><Timer size={22} /></span>
+            <article className="feature-card panel-card">
+              <div className="feature-icon-box">
+                <Timer size={22} />
+              </div>
               <h3>{ui.home.feature3Title}</h3>
               <p>{ui.home.feature3Text}</p>
-              <Link href={`/${locale}/pomodoro`}>
+              <Link href={`/${locale}/pomodoro`} className="feature-link">
                 {ui.home.explore} <span>→</span>
               </Link>
             </article>
@@ -161,7 +184,7 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Study Tracks Showcase */}
+      {/* Study Tracks Showcase (2x2 Grid) */}
       <section className="content-section alternate">
         <div className="shell">
           <div className="section-head">
@@ -169,32 +192,35 @@ export default async function HomePage({
             <h2>{ui.home.coursesTitle}</h2>
           </div>
 
-          <div className="courses-grid">
+          <div className="course-grid-2x2">
             {courses.map((course) => {
               const lessonsCount = course.modules.flatMap((m) => m.lessons).length;
               return (
-                <article className="course-card" key={course.code}>
-                  <header>
+                <article className="course-compact-card panel-card" key={course.code}>
+                  <div className="course-compact-header">
                     <span
-                      className="course-badge"
-                      style={{ color: course.accent, borderColor: `${course.accent}44` }}
+                      className="course-compact-badge"
+                      style={{ color: course.accent, borderColor: `${course.accent}66`, backgroundColor: `${course.accent}14` }}
                     >
                       {course.shortTitle}
                     </span>
-                    <span className="course-hours">{course.estimatedHours} {ui.common.hours}</span>
-                  </header>
-                  <h3>{course.title}</h3>
-                  <p>{course.description}</p>
-                  <div className="course-meta">
-                    <span>{course.modules.length} {ui.home.modulesCount}</span>
-                    <span>·</span>
-                    <span>{lessonsCount} {ui.common.lessons}</span>
-                    <span>·</span>
-                    <span>{course.level}</span>
+                    <span className="course-compact-hours">{course.estimatedHours} {ui.common.hours}</span>
                   </div>
-                  <Link className="course-link" href={`/${locale}/estudos/${course.code}`}>
-                    {ui.common.continueStudying} <span>→</span>
-                  </Link>
+                  
+                  <h3 className="course-compact-title">{course.title}</h3>
+                  <p className="course-compact-desc">{course.description}</p>
+                  
+                  <div className="course-compact-meta">
+                    <span className="meta-pill">{course.modules.length} {ui.home.modulesCount}</span>
+                    <span className="meta-pill">{lessonsCount} {ui.common.lessons}</span>
+                    <span className="meta-pill">{course.level}</span>
+                  </div>
+                  
+                  <div className="course-compact-footer">
+                    <Link className="course-compact-link" href={`/${locale}/estudos/${course.code}`}>
+                      {ui.common.continueStudying} <span>→</span>
+                    </Link>
+                  </div>
                 </article>
               );
             })}
@@ -234,7 +260,7 @@ export default async function HomePage({
       {/* Mission Control & Tools */}
       <section className="content-section alternate">
         <div className="shell">
-          <div className="mission-box">
+          <div className="mission-layout">
             <div className="mission-copy">
               <span className="section-kicker">{ui.home.missionKicker}</span>
               <h2>{ui.home.missionTitle}</h2>
@@ -243,23 +269,27 @@ export default async function HomePage({
                 {ui.home.openTools} <span>→</span>
               </Link>
             </div>
-            <div className="mission-hud">
-              <div className="hud-card">
-                <Compass size={18} />
-                <span>{ui.home.missionCard1}</span>
-              </div>
-              <div className="hud-card">
-                <Wrench size={18} />
-                <span>{ui.home.missionCard2}</span>
-              </div>
-              <div className="hud-card">
-                <Flame size={18} />
-                <span>{ui.home.missionCard3}</span>
-              </div>
-              <div className="hud-card">
-                <Timer size={18} />
-                <span>{ui.home.missionCard4}</span>
-              </div>
+            
+            <div className="mission-cards-grid">
+              {ui.home.missionCards.map((card, idx) => {
+                const icons = [
+                  <Compass key="1" size={22} />,
+                  <Wrench key="2" size={22} />,
+                  <Flame key="3" size={22} />,
+                  <Timer key="4" size={22} />,
+                ];
+                return (
+                  <Link href={`/${locale}/ferramentas`} key={card.title} className="mission-card panel-card">
+                    <div className="mission-card-icon">
+                      {icons[idx]}
+                    </div>
+                    <div className="mission-card-content">
+                      <strong>{card.title}</strong>
+                      <span>{card.subtitle}</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -286,6 +316,7 @@ export default async function HomePage({
                   <span className="chip-category">{term.category}</span>
                 </div>
                 <p>{term.shortDefinition}</p>
+                <span className="glossary-card-arrow">Ver explicação completa →</span>
               </Link>
             ))}
           </div>

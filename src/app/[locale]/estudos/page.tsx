@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
-import { ValidLocale, getAlternateLanguages, normalizeLocale } from "@/lib/i18n";
+import { ValidLocale, createPageMetadata, normalizeLocale } from "@/lib/i18n";
 import { getCourses } from "@/lib/translations/courses";
 import { getUi } from "@/lib/translations/ui";
 
@@ -12,7 +12,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const resolvedParams = await params;
   const locale = normalizeLocale(resolvedParams.locale);
-  const alternates = getAlternateLanguages("/estudos");
 
   const titles: Record<ValidLocale, { title: string; description: string }> = {
     "pt-br": {
@@ -35,14 +34,12 @@ export async function generateMetadata({
 
   const meta = titles[locale] || titles["pt-br"];
 
-  return {
+  return createPageMetadata({
+    locale,
+    path: "/estudos",
     title: meta.title,
     description: meta.description,
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
-  };
+  });
 }
 
 export default async function StudiesPage({
@@ -91,32 +88,35 @@ export default async function StudiesPage({
 
       <section className="content-section">
         <div className="shell">
-          <div className="courses-grid">
+          <div className="course-grid-2x2">
             {courses.map((course) => {
               const lessonsCount = course.modules.flatMap((m) => m.lessons).length;
               return (
-                <article className="course-card" key={course.code}>
-                  <header>
+                <article className="course-compact-card panel-card" key={course.code}>
+                  <div className="course-compact-header">
                     <span
-                      className="course-badge"
-                      style={{ color: course.accent, borderColor: `${course.accent}44` }}
+                      className="course-compact-badge"
+                      style={{ color: course.accent, borderColor: `${course.accent}66`, backgroundColor: `${course.accent}14` }}
                     >
                       {course.shortTitle}
                     </span>
-                    <span className="course-hours">{course.estimatedHours} {ui.common.hours}</span>
-                  </header>
-                  <h3>{course.title}</h3>
-                  <p>{course.description}</p>
-                  <div className="course-meta">
-                    <span>{course.modules.length} {ui.home.modulesCount}</span>
-                    <span>·</span>
-                    <span>{lessonsCount} {ui.common.lessons}</span>
-                    <span>·</span>
-                    <span>{course.level}</span>
+                    <span className="course-compact-hours">{course.estimatedHours} {ui.common.hours}</span>
                   </div>
-                  <Link className="course-link" href={`/${locale}/estudos/${course.code}`}>
-                    {ui.common.continueStudying} <span>→</span>
-                  </Link>
+                  
+                  <h3 className="course-compact-title">{course.title}</h3>
+                  <p className="course-compact-desc">{course.description}</p>
+                  
+                  <div className="course-compact-meta">
+                    <span className="meta-pill">{course.modules.length} {ui.home.modulesCount}</span>
+                    <span className="meta-pill">{lessonsCount} {ui.common.lessons}</span>
+                    <span className="meta-pill">{course.level}</span>
+                  </div>
+                  
+                  <div className="course-compact-footer">
+                    <Link className="course-compact-link" href={`/${locale}/estudos/${course.code}`}>
+                      {ui.common.continueStudying} <span>→</span>
+                    </Link>
+                  </div>
                 </article>
               );
             })}
