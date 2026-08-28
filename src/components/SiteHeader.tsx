@@ -8,6 +8,7 @@ import { ValidLocale, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { soundEngine } from "./GlobalInteractivity";
+import { FoxLogo } from "./FoxLogo";
 
 export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
   const [open, setOpen] = useState(false);
@@ -49,8 +50,7 @@ export function SiteHeader({ initialLocale }: { initialLocale?: ValidLocale }) {
           aria-label={`FOX SIM — ${ui.tagline}`}
           onClick={() => soundEngine.playChirp()}
         >
-          <span className="brand-mark">F</span>
-          <span>FOX SIM</span>
+          <FoxLogo size={38} />
         </Link>
 
         <nav className={open ? "main-nav is-open" : "main-nav"} aria-label={ui.siteName}>

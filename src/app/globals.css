@@ -57,24 +57,59 @@ img { max-width: 100%; height: auto; }
   gap: 28px;
 }
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  text-decoration: none;
   flex: 0 0 auto;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.brand-mark {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  color: var(--night);
-  border-radius: 8px 3px 8px 3px;
-  background: var(--cyan);
-  font-size: 18px;
+.brand:hover {
+  transform: translateY(-1px);
+}
+.fox-brand-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.fox-emblem-svg {
+  filter: drop-shadow(0 0 8px rgba(79, 227, 219, 0.25));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+.brand:hover .fox-emblem-svg {
+  filter: drop-shadow(0 0 16px rgba(79, 227, 219, 0.5));
+  transform: scale(1.04);
+}
+.fox-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.fox-brand-title {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-family: var(--font-display);
+  font-size: 19px;
   font-weight: 900;
+  letter-spacing: 0.08em;
+}
+.fox-text-fox {
+  color: #ffffff;
+  letter-spacing: 0.1em;
+}
+.fox-text-sim {
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(79, 227, 219, 0.4);
+  letter-spacing: 0.08em;
+}
+.fox-brand-sub {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #698391;
+  margin-top: 3px;
+  text-transform: uppercase;
 }
 .main-nav {
   display: flex;

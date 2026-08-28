@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Cookie } from "lucide-react";
 import { ValidLocale, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
+import { FoxLogo } from "./FoxLogo";
 
 export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
   const pathname = usePathname() || "";
@@ -27,8 +28,7 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
       <div className="shell footer-grid">
         <div className="footer-brand">
           <Link className="brand" href={`/${locale}`}>
-            <span className="brand-mark">F</span>
-            <span>FOX SIM</span>
+            <FoxLogo size={42} />
           </Link>
           <p>{ui.footer.aboutText}</p>
           <span className="educational-label">{ui.footer.educationalNotice}</span>
