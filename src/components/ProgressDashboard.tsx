@@ -233,9 +233,9 @@ export function ProgressDashboard({ locale = "pt-br" }: { locale?: ValidLocale }
     (progress.correctAnswers / (progress.questionsAnswered || 1)) * 100
   );
 
-  const reviews: [string, number][] = Object.entries(progress.reviewTopics || {}).map(
-    ([topic, count]) => [topic, Number(count)]
-  ).sort((a, b) => b[1] - a[1]);
+  const reviews: Array<[string, number]> = Object.entries(progress.reviewTopics || {})
+    .map(([topic, count]): [string, number] => [topic, typeof count === "number" ? count : Number(count) || 0])
+    .sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="dashboard-layout">
