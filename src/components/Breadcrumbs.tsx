@@ -3,7 +3,7 @@ import Link from "next/link";
 type Crumb = { label: string; href?: string };
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://foxsim.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://foxsim.blog";
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

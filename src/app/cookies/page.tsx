@@ -1,9 +1,41 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/LegalPage";
-export const metadata: Metadata = { title: "Política de cookies", description: "Entenda o uso de LocalStorage e preferências no portal FOX SIM.", alternates: { canonical: "/cookies" } };
-export default function CookiesPage() { return <LegalPage eyebrow="PREFERÊNCIAS" title="Política de cookies" description="O que fica salvo no navegador e como gerenciar suas escolhas." path="/cookies" sections={[
-  { title: "Tecnologias usadas", paragraphs: ["No lançamento inicial, a FOX SIM usa principalmente LocalStorage, e não cookies de publicidade, para guardar progresso, resultados, metas e a escolha exibida no banner."] },
-  { title: "Armazenamento essencial", paragraphs: ["A preferência do banner evita mostrar a mesma mensagem em todas as visitas. O progresso local permite retomar aulas, histórico e Pomodoro no mesmo navegador."] },
-  { title: "Publicidade futura", paragraphs: ["O código do AdSense só é carregado quando um identificador real é configurado. Antes de ativar publicidade que use cookies ou identificadores, será necessário aplicar consentimento compatível e atualizar esta política."] },
-  { title: "Como apagar", paragraphs: ["Abra as configurações de privacidade do navegador, localize os dados do site FOX SIM e remova-os. Isso reinicia painel, metas, histórico e preferências neste dispositivo."] },
-]} />; }
+
+export const metadata: Metadata = {
+  title: "Política de cookies",
+  description: "Entenda o uso de cookies, publicidade do Google AdSense e armazenamento local no portal FOX SIM.",
+  alternates: { canonical: "/cookies" },
+};
+
+export default function CookiesPage() {
+  return (
+    <LegalPage
+      eyebrow="PREFERÊNCIAS"
+      title="Política de cookies"
+      description="Como cookies e armazenamento local são utilizados e como gerenciar suas opções."
+      path="/cookies"
+      sections={[
+        {
+          title: "Armazenamento Essencial e Preferências Locais",
+          paragraphs: [
+            "A FOX SIM utiliza LocalStorage no seu navegador para salvar seu progresso nas aulas, respostas dos simulados, metas do Pomodoro e a confirmação do banner de privacidade. Esses itens são essenciais para manter sua experiência de estudo salva no seu dispositivo sem a necessidade de login.",
+          ],
+        },
+        {
+          title: "Cookies de Publicidade do Google AdSense",
+          paragraphs: [
+            "Para manter o portal gratuito e acessível a estudantes e entusiastas de aviação, utilizamos o Google AdSense. O Google e seus parceiros podem configurar cookies no seu navegador para exibir anúncios relevantes e medir o desempenho das campanhas.",
+            "Esses cookies ajudam a identificar se um anúncio já foi exibido e a adequar a publicidade aos interesses do usuário de forma segura.",
+          ],
+        },
+        {
+          title: "Como Gerenciar ou Desativar Cookies",
+          paragraphs: [
+            "Você pode desativar cookies de publicidade personalizada diretamente nas Configurações de Anúncios do Google (https://www.google.com/settings/ads) ou por meio do site www.aboutads.info.",
+            "Também é possível configurar seu navegador para bloquear, recusar ou excluir todos os cookies e limpar os dados de armazenamento local nas opções de privacidade do navegador.",
+          ],
+        },
+      ]}
+    />
+  );
+}

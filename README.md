@@ -11,7 +11,7 @@ Portal educacional de aviação e simulação construído com Next.js, React e T
 - Dez calculadoras e conversores aeronáuticos
 - Biblioteca com artigos de meteorologia, navegação, performance e simulação
 - SEO técnico, dados estruturados, sitemap, robots e páginas institucionais
-- Integração opcional com Google AdSense sem identificador fictício
+- Integração completa com Google AdSense (script global, metatag e ads.txt)
 
 ## Desenvolvimento
 
@@ -28,7 +28,7 @@ npm run typecheck
 npm run build
 ```
 
-Copie `.env.example` para `.env.local` somente quando precisar configurar valores locais. O portal funciona sem variáveis para desenvolvimento; em produção, `NEXT_PUBLIC_SITE_URL` deve apontar para o domínio público. `NEXT_PUBLIC_ADSENSE_CLIENT` é opcional e só deve conter um identificador real.
+Copie `.env.example` para `.env.local` quando precisar customizar variáveis locais. O portal já vem configurado para o domínio `https://foxsim.blog` e com o ID do AdSense `ca-pub-3918433594573040`.
 
 ## Aviso
 

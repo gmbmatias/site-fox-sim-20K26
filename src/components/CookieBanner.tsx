@@ -17,8 +17,8 @@ export function CookieBanner() {
   if (!visible) return null;
   return (
     <aside className="cookie-banner" aria-label="Preferências de cookies">
-      <div><b>Seu controle de privacidade</b><p>Usamos armazenamento local para salvar progresso e preferências. Publicidade não está ativa. <Link href="/cookies">Saiba mais</Link>.</p></div>
-      <div className="cookie-actions"><button type="button" onClick={() => choose("essential")}>Somente essenciais</button><button className="button-primary" type="button" onClick={() => choose("accepted")}>Aceitar</button></div>
+      <div><b>Privacidade e Cookies</b><p>Usamos armazenamento local para salvar seu progresso e cookies para métricas e exibição de anúncios. <Link href="/cookies">Saiba mais</Link>.</p></div>
+      <div className="cookie-actions"><button type="button" onClick={() => choose("essential")}>Somente essenciais</button><button className="button-primary" type="button" onClick={() => choose("accepted")}>Aceitar todos</button></div>
     </aside>
   );
 }

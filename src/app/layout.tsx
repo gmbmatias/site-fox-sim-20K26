@@ -5,7 +5,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://foxsim.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://foxsim.blog";
+const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-3918433594573040";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -21,7 +22,9 @@ export const metadata: Metadata = {
   openGraph: { type: "website", locale: "pt_BR", url: siteUrl, siteName: "FOX SIM", title: "FOX SIM — Conhecimento para voar mais longe", description: "Trilhas de aviação, questões, simulados e ferramentas em uma experiência feita para estudar." },
   twitter: { card: "summary_large_image", title: "FOX SIM — Estudos e aviação virtual", description: "Conhecimento para voar mais longe." },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
-  other: process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.startsWith("ca-pub-") ? { "google-adsense-account": process.env.NEXT_PUBLIC_ADSENSE_CLIENT } : undefined,
+  other: {
+    "google-adsense-account": adsenseClient,
+  },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#071019", colorScheme: "dark" };
@@ -34,6 +37,13 @@ const globalSchema = [
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>
         <SiteHeader />
         {children}
