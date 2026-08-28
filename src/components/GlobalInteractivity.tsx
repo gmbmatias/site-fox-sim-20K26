@@ -3,11 +3,12 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Search, Plane, X, Volume2, VolumeX, Sparkles, BookOpen, FileText, Wrench, Compass, HelpCircle, ArrowRight } from "lucide-react";
+import { Search, Plane, X, Volume2, VolumeX, Sparkles, BookOpen, FileText, Wrench, Compass, HelpCircle, ArrowRight, MessageSquare } from "lucide-react";
 import { ValidLocale, normalizeLocale } from "@/lib/i18n";
 import { getArticles } from "@/lib/translations/articles";
 import { getGlossaryTerms } from "@/lib/translations/glossary";
 import { getGuides } from "@/lib/translations/guides";
+import { FoxCopilotChat, DISCORD_LINK, WHATSAPP_LINK, DiscordIcon, WhatsAppIcon } from "./FoxCopilotChat";
 
 // Web Audio API Sound Synthesizer for Cockpit Sound Effects
 class CockpitSoundEngine {
@@ -436,7 +437,10 @@ export function GlobalInteractivity({ locale: initialLocale }: { locale?: ValidL
         )}
       </aside>
 
-      {/* 3. Global Toast Feedback Notification */}
+      {/* 3. Interactive Fox Copilot Chat Widget */}
+      <FoxCopilotChat locale={locale} />
+
+      {/* 4. Global Toast Feedback Notification */}
       {toastMessage && (
         <div className={`global-cockpit-toast ${toastType}`} role="alert">
           <Sparkles size={16} className="toast-icon" />

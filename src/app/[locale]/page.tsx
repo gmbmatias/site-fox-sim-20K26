@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, CheckCircle2, ChevronRight, Compass, Flame, Layers, Sparkles, Timer, Wrench, Shield, Award } from "lucide-react";
+import { ArrowUpRight, BookOpen, CheckCircle2, ChevronRight, Compass, Flame, Layers, Sparkles, Timer, Wrench, Shield, Award, ExternalLink } from "lucide-react";
 import { ValidLocale, createPageMetadata, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
 import { getCourses } from "@/lib/translations/courses";
@@ -8,6 +8,7 @@ import { getArticles } from "@/lib/translations/articles";
 import { getGlossaryTerms } from "@/lib/translations/glossary";
 import { getGuides } from "@/lib/translations/guides";
 import { FlightDeckHUD } from "@/components/FlightDeckHUD";
+import { DISCORD_LINK, WHATSAPP_LINK, DiscordIcon, WhatsAppIcon } from "@/components/FoxCopilotChat";
 
 export async function generateMetadata({
   params,
@@ -361,6 +362,61 @@ export default async function HomePage({
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Official Aviation Community Section */}
+      <section className="content-section alternate">
+        <div className="shell">
+          <div className="section-head">
+            <span className="section-kicker">COMUNIDADE AERONÁUTICA</span>
+            <h2>Voe em Esquadrilha. Junte-se à nossa Comunidade.</h2>
+            <p>Tire dúvidas sobre matérias da ANAC, troque experiências de simulação de voo e estude com outros comandantes.</p>
+          </div>
+
+          <div className="home-community-grid">
+            <div className="community-card panel-card discord">
+              <div className="community-card-icon discord">
+                <DiscordIcon size={28} />
+              </div>
+              <div className="community-card-body">
+                <span className="community-badge discord">CANAL OFICIAL DISCORD</span>
+                <h3>Servidor FOX SIM</h3>
+                <p>Salas de voz para voos multiplayer no MSFS e X-Plane, canais de meteorologia ao vivo e suporte para simuladores.</p>
+                <a
+                  href={DISCORD_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-primary community-btn discord"
+                >
+                  <DiscordIcon size={18} />
+                  <span>Entrar no Discord</span>
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+
+            <div className="community-card panel-card whatsapp">
+              <div className="community-card-icon whatsapp">
+                <WhatsAppIcon size={28} />
+              </div>
+              <div className="community-card-body">
+                <span className="community-badge whatsapp">GRUPO OFICIAL WHATSAPP</span>
+                <h3>Comunidade WhatsApp</h3>
+                <p>Discussões diárias sobre questões de prova, dicas rápidas de teoria de voo e avisos operacionais diretamente no seu celular.</p>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-primary community-btn whatsapp"
+                >
+                  <WhatsAppIcon size={18} />
+                  <span>Entrar no Grupo WhatsApp</span>
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>

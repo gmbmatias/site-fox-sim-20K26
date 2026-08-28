@@ -6,6 +6,7 @@ import { Cookie } from "lucide-react";
 import { ValidLocale, normalizeLocale } from "@/lib/i18n";
 import { getUi } from "@/lib/translations/ui";
 import { FoxLogo } from "./FoxLogo";
+import { DISCORD_LINK, WHATSAPP_LINK, DiscordIcon, WhatsAppIcon } from "./FoxCopilotChat";
 
 export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
   const pathname = usePathname() || "";
@@ -20,6 +21,12 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
   const openCookieModal = () => {
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event("foxsim-open-cookie-modal"));
+    }
+  };
+
+  const openCopilotChat = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("foxsim-open-chat"));
     }
   };
 
@@ -50,6 +57,36 @@ export function SiteFooter({ initialLocale }: { initialLocale?: ValidLocale }) {
           <Link href={`/${locale}/ferramentas`}>{ui.nav.tools}</Link>
           <Link href={`/${locale}/painel`}>{ui.nav.dashboard}</Link>
           <Link href={`/${locale}/meu-progresso`}>{ui.breadcrumbs.progress}</Link>
+        </div>
+
+        {/* Community & Discord/WhatsApp Column */}
+        <div className="footer-col footer-community-col">
+          <b>Comunidade</b>
+          <a
+            href={DISCORD_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-community-link discord"
+          >
+            <DiscordIcon size={15} />
+            <span>Discord Oficial</span>
+          </a>
+          <a
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-community-link whatsapp"
+          >
+            <WhatsAppIcon size={15} />
+            <span>Grupo WhatsApp</span>
+          </a>
+          <button
+            type="button"
+            className="footer-chat-trigger"
+            onClick={openCopilotChat}
+          >
+            💬 Dúvidas (Copilot)
+          </button>
         </div>
 
         <div className="footer-col">
